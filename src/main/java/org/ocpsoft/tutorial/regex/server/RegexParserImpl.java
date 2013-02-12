@@ -45,47 +45,63 @@ public class RegexParserImpl implements RegexParser
             return result;
          }
 
+         List<CapturingGroup> captures = parseRegex(regex);
+
          matcher.reset();
          while (matcher.find())
          {
-            result.getFindGroups().add(new Group(regex, matcher.start(), matcher.end()));
-         }
-
-         List<CapturingGroup> captures = new ArrayList<ParseTools.CapturingGroup>();
-         char[] chars = regex.toCharArray();
-         if (chars.length > 0)
-         {
-            int cursor = 0;
-            while (cursor < chars.length)
-            {
-               switch (chars[cursor])
-               {
-               case '(':
-                  CapturingGroup group = ParseTools.balancedCapture(chars, cursor, chars.length - 1, CaptureType.PAREN);
-                  captures.add(group);
-
-                  break;
-
-               default:
-                  break;
-               }
-
-               cursor++;
-            }
-         }
-
-         matcher.reset();
-         if (matcher.matches())
             for (int i = 0; i < matcher.groupCount(); i++)
             {
-               result.getPatternGroups().add(new Group(
+               result.getGroups().add(new Group(
                         new String(captures.get(i).getCaptured()),
                         matcher.start(i + 1),
                         matcher.end(i + 1))
                         );
             }
+         }
+
+         matcher.reset();
+         if (matcher.matches())
+         {
+            result.getGroups().clear();
+            for (int i = 0; i < matcher.groupCount(); i++)
+            {
+               result.getGroups().add(new Group(
+                        new String(captures.get(i).getCaptured()),
+                        matcher.start(i + 1),
+                        matcher.end(i + 1))
+                        );
+            }
+         }
       }
       return result;
+   }
+
+   private List<CapturingGroup> parseRegex(String regex)
+   {
+      List<CapturingGroup> captures = new ArrayList<ParseTools.CapturingGroup>();
+      char[] chars = regex.toCharArray();
+      if (chars.length > 0)
+      {
+         int cursor = 0;
+         while (cursor < chars.length)
+         {
+            switch (chars[cursor])
+            {
+            case '(':
+               CapturingGroup group = ParseTools.balancedCapture(chars, cursor, chars.length - 1, CaptureType.PAREN);
+               captures.add(group);
+
+               break;
+
+            default:
+               break;
+            }
+
+            cursor++;
+         }
+      }
+      return captures;
    }
 
    public String javaMode(String regex)

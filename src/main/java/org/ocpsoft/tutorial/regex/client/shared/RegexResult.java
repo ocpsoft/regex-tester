@@ -11,8 +11,7 @@ public class RegexResult
    private String error;
    private String replaced;
    private boolean matches;
-   private List<Group> findGroups = new ArrayList<Group>();
-   private List<Group> patternGroups = new ArrayList<Group>();
+   private List<Group> groups = new ArrayList<Group>();
    private String text;
 
    public String getError()
@@ -20,14 +19,9 @@ public class RegexResult
       return error;
    }
 
-   public List<Group> getFindGroups()
+   public List<Group> getGroups()
    {
-      return findGroups;
-   }
-
-   public List<Group> getPatternGroups()
-   {
-      return patternGroups;
+      return groups;
    }
 
    public String getReplaced()
@@ -50,11 +44,6 @@ public class RegexResult
       this.error = error;
    }
 
-   public void setFindGroups(List<Group> groups)
-   {
-      this.findGroups = groups;
-   }
-
    public void setMatches(boolean matches)
    {
       this.matches = matches;
@@ -62,7 +51,7 @@ public class RegexResult
 
    public void setPatternGroups(List<Group> groups)
    {
-      this.patternGroups = groups;
+      this.groups = groups;
    }
 
    public void setReplaced(String text)
