@@ -1,0 +1,25 @@
+/*
+ * Debugging styles
+ */
+.gwt-DialogBox {
+	z-index: 10000;
+}
+
+/*
+ * Application styles
+ */
+
+input, .result {
+	padding: 10px;
+	font-size: 26px;
+	font-family: monospace;
+}
+
+.matches {
+	background-color: #D9FFE5;
+	padding: 10px;
+}
+
+.inputs {
+	margin-top: 50px;
+}
