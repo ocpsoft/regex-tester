@@ -20,10 +20,7 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import org.jboss.errai.databinding.client.api.DataBinder;
 import org.jboss.errai.ioc.client.api.EntryPoint;
-import org.jboss.errai.ui.shared.api.annotations.AutoBound;
-import org.jboss.errai.ui.shared.api.annotations.Bound;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
@@ -44,23 +41,16 @@ import com.google.gwt.user.client.ui.TextBox;
 public class App extends Composite
 {
    @Inject
-   @Bound
    @DataField
    private TextBox text;
 
    @Inject
-   @Bound
    @DataField
    private TextBox regex;
 
    @Inject
-   @Bound
    @DataField
    private TextBox replacement;
-
-   @Inject
-   @AutoBound
-   private DataBinder<RegexRequest> request;
 
    @Inject
    @DataField
@@ -72,8 +62,7 @@ public class App extends Composite
    @EventHandler({ "text", "regex", "replacement" })
    void handleUpdate(KeyUpEvent event)
    {
-      result.setText(text.getText());
-      requestEvent.fire(request.getModel());
+      requestEvent.fire(new RegexRequest(text.getText(), regex.getText(), replacement.getText()));
    }
 
    public void handleResult(@Observes RegexResult event)
@@ -82,7 +71,7 @@ public class App extends Composite
          result.addStyleName("matches");
       else
          result.removeStyleName("matches");
-      
+
       result.setText(event.getText());
    }
 

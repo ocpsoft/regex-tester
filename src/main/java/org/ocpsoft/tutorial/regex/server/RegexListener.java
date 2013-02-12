@@ -16,16 +16,52 @@ public class RegexListener
 
    public void handleRequest(@Observes RegexRequest request)
    {
-      System.out.println(request);
-
       RegexResult result = new RegexResult();
-      if (request.getText() != null)
+      if (request.getText() != null && !request.getText().isEmpty())
       {
          result.setText(request.getText());
-         if (request.getRegex() != null)
-            result.setMatches(request.getText().matches(request.getRegex()));
+         try {
+            String regex = javaMode(request.getRegex());
+            if (regex != null)
+               result.setMatches(request.getText().matches(regex));
+         }
+         catch (Exception e) {
+            result.setText(e.getMessage());
+         }
       }
 
       resultEvent.fire(result);
+   }
+
+   public String javaMode(String regex)
+   {
+      StringBuilder result = new StringBuilder();
+
+      int count = 0;
+      for (int i = 0; i < regex.length(); i++) {
+         char c = regex.charAt(i);
+
+         if (c == '\\')
+         {
+            count++;
+         }
+
+         if (count % 2 == 1)
+         {
+            if (c != '\\')
+            {
+               if (i + 1 < regex.length())
+               {
+                  throw new RegexException("Unterminated escape sequence at character " + i + ": " + regex + " <--");
+               }
+            }
+            else if (i + 1 == regex.length())
+            {
+               throw new RegexException("Unterminated escape sequence at character " + i + ": " + regex + " <--");
+            }
+         }
+         result.append(c);
+      }
+      return result.toString().replaceAll("\\\\\\\\", "\\\\");
    }
 }

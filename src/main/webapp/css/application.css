@@ -16,6 +16,7 @@ input, .result {
 }
 
 .matches {
+	line-height: 27px;
 	background-color: #D9FFE5;
 	padding: 10px;
 }

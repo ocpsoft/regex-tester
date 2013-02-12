@@ -1,10 +1,8 @@
 package org.ocpsoft.tutorial.regex.client.shared;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
-import org.jboss.errai.databinding.client.api.Bindable;
 
 @Portable
-@Bindable
 public class RegexRequest
 {
    private String text;
