@@ -21,6 +21,12 @@
 <link href="<%=contextPath%>/bootstrap/css/bootstrap-responsive.css"
 	rel="stylesheet">
 
+<!-- Google Fonts -->
+<link href='http://fonts.googleapis.com/css?family=Gudea:400,700'
+	rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Inconsolata'
+	rel='stylesheet' type='text/css'>
+
 <!-- Le fav and touch icons -->
 <link rel="shortcut icon" href="<%=contextPath%>/favicon.ico">
 <link rel="apple-touch-icon" href="<%=contextPath%>/favicon.ico">

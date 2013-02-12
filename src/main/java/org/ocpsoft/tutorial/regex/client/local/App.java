@@ -122,9 +122,9 @@ public class App extends Composite
             result.removeStyleName("matches");
       }
 
-      if (event.getText() != null && !event.getText().isEmpty())
+      if (event.getReplaced() != null && !event.getReplaced().isEmpty())
       {
-         replaced.setText(event.getText());
+         replaced.setText(event.getReplaced());
          replaced.setVisible(true);
       }
       else

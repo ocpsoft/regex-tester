@@ -1,14 +1,19 @@
 package org.ocpsoft.tutorial.regex.server;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.enterprise.context.RequestScoped;
 
 import org.jboss.errai.bus.server.annotations.Service;
+import org.ocpsoft.tutorial.regex.client.shared.Group;
 import org.ocpsoft.tutorial.regex.client.shared.RegexParser;
 import org.ocpsoft.tutorial.regex.client.shared.RegexRequest;
 import org.ocpsoft.tutorial.regex.client.shared.RegexResult;
+import org.ocpsoft.tutorial.regex.server.ParseTools.CaptureType;
+import org.ocpsoft.tutorial.regex.server.ParseTools.CapturingGroup;
 
 @Service
 @RequestScoped
@@ -31,7 +36,7 @@ public class RegexParserImpl implements RegexParser
                matcher = Pattern.compile(regex).matcher(request.getText());
                result.setMatches(matcher.matches());
                if (request.getReplacement() != null && !request.getReplacement().isEmpty())
-                  result.setText(matcher.replaceAll(javaMode(request.getReplacement())));
+                  result.setReplaced(matcher.replaceAll(javaMode(request.getReplacement())));
             }
          }
          catch (Exception e) {
@@ -43,18 +48,42 @@ public class RegexParserImpl implements RegexParser
       matcher.reset();
       while (matcher.find())
       {
-         matcher.group();
-         matcher.start();
-         matcher.end();
-      }      
-      
-      matcher.reset();
-      if(matcher.groupCount() > 1)
-      while (matcher.find())
-      {
-         matcher.group();
-         matcher.end();
+         result.getFindGroups().add(new Group(regex, matcher.start(), matcher.end()));
       }
+
+      List<CapturingGroup> captures = new ArrayList<ParseTools.CapturingGroup>();
+      char[] chars = regex.toCharArray();
+      if (chars.length > 0)
+      {
+         int cursor = 0;
+         while (cursor < chars.length)
+         {
+            switch (chars[cursor])
+            {
+            case '(':
+               CapturingGroup group = ParseTools.balancedCapture(chars, cursor, chars.length - 1, CaptureType.PAREN);
+               captures.add(group);
+
+               break;
+
+            default:
+               break;
+            }
+
+            cursor++;
+         }
+      }
+
+      matcher.reset();
+      if (matcher.matches())
+         for (int i = 0; i < matcher.groupCount(); i++)
+         {
+            result.getPatternGroups().add(new Group(
+                     new String(captures.get(i).getCaptured()),
+                     matcher.start(i + 1),
+                     matcher.end(i + 1))
+                     );
+         }
 
       return result;
    }

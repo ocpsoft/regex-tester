@@ -1,22 +1,37 @@
 package org.ocpsoft.tutorial.regex.client.shared;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jboss.errai.common.client.api.annotations.Portable;
 
 @Portable
 public class RegexResult
 {
    private String error;
-   private String text;
+   private String replaced;
    private boolean matches;
+   private List<Group> findGroups = new ArrayList<Group>();
+   private List<Group> patternGroups = new ArrayList<Group>();
 
-   public String getText()
+   public String getError()
    {
-      return text;
+      return error;
    }
 
-   public void setText(String text)
+   public List<Group> getFindGroups()
    {
-      this.text = text;
+      return findGroups;
+   }
+
+   public List<Group> getPatternGroups()
+   {
+      return patternGroups;
+   }
+
+   public String getReplaced()
+   {
+      return replaced;
    }
 
    public boolean isMatches()
@@ -24,19 +39,28 @@ public class RegexResult
       return matches;
    }
 
-   public void setMatches(boolean matches)
-   {
-      this.matches = matches;
-   }
-
-   public String getError()
-   {
-      return error;
-   }
-
    public void setError(String error)
    {
       this.error = error;
    }
 
+   public void setFindGroups(List<Group> groups)
+   {
+      this.findGroups = groups;
+   }
+
+   public void setMatches(boolean matches)
+   {
+      this.matches = matches;
+   }
+
+   public void setPatternGroups(List<Group> groups)
+   {
+      this.patternGroups = groups;
+   }
+
+   public void setReplaced(String text)
+   {
+      this.replaced = text;
+   }
 }
