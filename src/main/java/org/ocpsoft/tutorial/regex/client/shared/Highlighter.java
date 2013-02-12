@@ -41,6 +41,26 @@ public final class Highlighter
             seen.add(group);
          }
       }
+      else if(!event.getFindGroups().isEmpty())
+      {
+         colorIndex = 0;
+         List<Group> groups = new ArrayList<Group>(event.getFindGroups());
+         Collections.reverse(groups);
+
+         List<Group> seen = new ArrayList<Group>();
+
+         for (Group group : groups) {
+            int start = group.getStart();
+            int end = group.getEnd();
+
+            String prefix = result.substring(0, start);
+            String content = result.substring(start, end);
+            String suffix = result.substring(end);
+            result = prefix + selectColor().replaceFirst("highlight", "highlight group") + content + COLOR_END + suffix;
+
+            seen.add(group);
+         }
+      }
 
       return result;
    }

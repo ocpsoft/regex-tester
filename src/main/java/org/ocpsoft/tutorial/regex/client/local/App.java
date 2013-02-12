@@ -26,17 +26,17 @@ import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
+import org.ocpsoft.tutorial.regex.client.shared.Highlighter;
 import org.ocpsoft.tutorial.regex.client.shared.RegexParser;
 import org.ocpsoft.tutorial.regex.client.shared.RegexRequest;
 import org.ocpsoft.tutorial.regex.client.shared.RegexResult;
-import org.ocpsoft.tutorial.regex.client.shared.Highlighter;
 
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.TextArea;
 
 /**
  * Main application entry point.
@@ -51,15 +51,15 @@ public class App extends Composite
 
    @Inject
    @DataField
-   private TextBox text;
+   private TextArea text;
 
    @Inject
    @DataField
-   private TextBox regex;
+   private TextArea regex;
 
    @Inject
    @DataField
-   private TextBox replacement;
+   private TextArea replacement;
 
    @Inject
    @DataField
@@ -79,6 +79,21 @@ public class App extends Composite
       error.setVisible(false);
       replaced.setVisible(false);
    }
+   
+   @Override
+   protected void onAttach()
+   {
+      super.onAttach();
+      initAutogrow();
+   }
+
+   private native void initAutogrow()
+   /*-{
+       var $opts = {within: 0, by: 1, interval: 100, duration: 'fast'};
+       $wnd.$('#text').css('overflow', 'hidden').expandable($opts)
+       $wnd.$('#regex').css('overflow', 'hidden').expandable($opts)
+       $wnd.$('#replacement').css('overflow', 'hidden').expandable($opts)
+    }-*/;
 
    @Inject
    private Caller<RegexParser> parser;

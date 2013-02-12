@@ -105,7 +105,7 @@ public class RegexParserImpl implements RegexParser
          {
             if (c != '\\')
             {
-               if (i + 1 < regex.length())
+               if (i + 1 <= regex.length())
                {
                   throw new RegexException("Unterminated escape sequence at character " + i + ": " + result);
                }

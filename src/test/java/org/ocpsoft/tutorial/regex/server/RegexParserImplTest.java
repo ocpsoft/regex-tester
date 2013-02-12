@@ -108,6 +108,12 @@ public class RegexParserImplTest
    }
 
    @Test(expected = RegexException.class)
+   public void testSingleBackslashWithToken()
+   {
+      l.javaMode("\\w");
+   }
+
+   @Test(expected = RegexException.class)
    public void testSingleCharBackslashBeforeValidEscape()
    {
       l.javaMode("\\asdf\\\\");

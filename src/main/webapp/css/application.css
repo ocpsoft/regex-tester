@@ -16,21 +16,22 @@ h1 {
 	font-size: 40px;
 }
 
-input {
+input,textarea {
 	display: block;
 	width: 100%;
-	min-height: 45px;
+	min-height: 51px;
 	box-sizing: border-box;
 }
 
-input,.result,.error,.replaced {
+input,textarea,.result,.error,.replaced {
 	padding: 10px;
-	font-size: 26px;
-	line-height: 30px;
+	font-size: 25px;
+	line-height: 25px;
 	font-family: monospace;
 	white-space: pre-wrap;
 	overflow: hidden;
-	word-wrap: break-word; 
+	word-wrap: break-word;
+	box-sizing: border-box;
 }
 
 .error {
@@ -56,4 +57,8 @@ input,.result,.error,.replaced {
 	border-bottom: solid 2px;
 	margin-bottom: 2px;
 	display: inline-block;
+}
+
+.group {
+	display: inline;
 }
