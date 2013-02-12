@@ -35,4 +35,10 @@ public class Group
       return end;
    }
 
+   @Override
+   public String toString()
+   {
+      return "Group [fragment=" + fragment + ", start=" + start + ", end=" + end + "]";
+   }
+
 }

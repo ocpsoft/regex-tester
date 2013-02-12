@@ -28,6 +28,9 @@ input,.result,.error,.replaced {
 	font-size: 26px;
 	line-height: 30px;
 	font-family: monospace;
+	white-space: pre-wrap;
+	overflow: hidden;
+	word-wrap: break-word; 
 }
 
 .error {
@@ -44,5 +47,13 @@ input,.result,.error,.replaced {
 }
 
 .replaced {
-	background-color: #D6E0FF;
+	background-color: #BFE0FF;
+}
+
+.highlight {
+	padding-bottom: 2px;
+	border-color: #888888;
+	border-bottom: solid 2px;
+	margin-bottom: 2px;
+	display: inline-block;
 }

@@ -23,6 +23,7 @@ public class RegexParserImpl implements RegexParser
    public RegexResult parse(RegexRequest request)
    {
       RegexResult result = new RegexResult();
+      result.setText(request.getText());
 
       Matcher matcher = null;
 
@@ -43,48 +44,47 @@ public class RegexParserImpl implements RegexParser
             result.setError(e.getMessage());
             return result;
          }
-      }
 
-      matcher.reset();
-      while (matcher.find())
-      {
-         result.getFindGroups().add(new Group(regex, matcher.start(), matcher.end()));
-      }
-
-      List<CapturingGroup> captures = new ArrayList<ParseTools.CapturingGroup>();
-      char[] chars = regex.toCharArray();
-      if (chars.length > 0)
-      {
-         int cursor = 0;
-         while (cursor < chars.length)
+         matcher.reset();
+         while (matcher.find())
          {
-            switch (chars[cursor])
+            result.getFindGroups().add(new Group(regex, matcher.start(), matcher.end()));
+         }
+
+         List<CapturingGroup> captures = new ArrayList<ParseTools.CapturingGroup>();
+         char[] chars = regex.toCharArray();
+         if (chars.length > 0)
+         {
+            int cursor = 0;
+            while (cursor < chars.length)
             {
-            case '(':
-               CapturingGroup group = ParseTools.balancedCapture(chars, cursor, chars.length - 1, CaptureType.PAREN);
-               captures.add(group);
+               switch (chars[cursor])
+               {
+               case '(':
+                  CapturingGroup group = ParseTools.balancedCapture(chars, cursor, chars.length - 1, CaptureType.PAREN);
+                  captures.add(group);
 
-               break;
+                  break;
 
-            default:
-               break;
+               default:
+                  break;
+               }
+
+               cursor++;
             }
-
-            cursor++;
          }
+
+         matcher.reset();
+         if (matcher.matches())
+            for (int i = 0; i < matcher.groupCount(); i++)
+            {
+               result.getPatternGroups().add(new Group(
+                        new String(captures.get(i).getCaptured()),
+                        matcher.start(i + 1),
+                        matcher.end(i + 1))
+                        );
+            }
       }
-
-      matcher.reset();
-      if (matcher.matches())
-         for (int i = 0; i < matcher.groupCount(); i++)
-         {
-            result.getPatternGroups().add(new Group(
-                     new String(captures.get(i).getCaptured()),
-                     matcher.start(i + 1),
-                     matcher.end(i + 1))
-                     );
-         }
-
       return result;
    }
 

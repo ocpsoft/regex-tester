@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.ocpsoft.tutorial.regex.client.shared.Group;
 import org.ocpsoft.tutorial.regex.client.shared.RegexRequest;
 import org.ocpsoft.tutorial.regex.client.shared.RegexResult;
+import org.ocpsoft.tutorial.regex.client.shared.Highlighter;
 
 public class RegexParserImplTest
 {
@@ -82,6 +83,22 @@ public class RegexParserImplTest
       Assert.assertEquals(text.length(), group.getEnd());
 
       Assert.assertEquals(3, result.getPatternGroups().size());
+   }
+
+   @Test
+   public void testResultsHighlight() throws Exception
+   {
+      String text = "the quick brown fox";
+      RegexResult result = l.parse(new RegexRequest(text, ".+(quick).+(fo(x))", "$1 $3"));
+
+      String highlighted = new Highlighter().highlight(text, result);
+      Assert.assertEquals(
+               "the <span style=\"color: #b22222\" class=\"highlight\">quick</span> brown " +
+                        "<span style=\"color: #ff1493\" class=\"highlight\">fo" +
+                        "<span style=\"color: #8b008b\" class=\"highlight\">x" +
+                        "</span>" +
+                        "</span>",
+               highlighted);
    }
 
    @Test(expected = RegexException.class)

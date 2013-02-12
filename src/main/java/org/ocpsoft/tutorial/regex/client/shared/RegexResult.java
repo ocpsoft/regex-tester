@@ -13,6 +13,7 @@ public class RegexResult
    private boolean matches;
    private List<Group> findGroups = new ArrayList<Group>();
    private List<Group> patternGroups = new ArrayList<Group>();
+   private String text;
 
    public String getError()
    {
@@ -32,6 +33,11 @@ public class RegexResult
    public String getReplaced()
    {
       return replaced;
+   }
+
+   public String getText()
+   {
+      return text;
    }
 
    public boolean isMatches()
@@ -62,5 +68,16 @@ public class RegexResult
    public void setReplaced(String text)
    {
       this.replaced = text;
+   }
+
+   public void setText(String text)
+   {
+      this.text = text;
+   }
+
+   @Override
+   public String toString()
+   {
+      return "RegexResult [error=" + error + ", replaced=" + replaced + ", matches=" + matches + "]";
    }
 }

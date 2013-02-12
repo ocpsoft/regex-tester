@@ -29,6 +29,7 @@ import org.jboss.errai.ui.shared.api.annotations.Templated;
 import org.ocpsoft.tutorial.regex.client.shared.RegexParser;
 import org.ocpsoft.tutorial.regex.client.shared.RegexRequest;
 import org.ocpsoft.tutorial.regex.client.shared.RegexResult;
+import org.ocpsoft.tutorial.regex.client.shared.Highlighter;
 
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.user.client.Timer;
@@ -44,6 +45,10 @@ import com.google.gwt.user.client.ui.TextBox;
 @Templated("Mockup.html#app-template")
 public class App extends Composite
 {
+   private static final int TIMEOUT = 150;
+
+   Highlighter highlighter = new Highlighter();
+
    @Inject
    @DataField
    private TextBox text;
@@ -78,28 +83,29 @@ public class App extends Composite
    @Inject
    private Caller<RegexParser> parser;
    private Timer timer;
+   private RegexRequest request;
 
    @EventHandler({ "text", "regex", "replacement" })
    void handleUpdate(KeyUpEvent event)
    {
-      result.setText(text.getText());
-
       if (timer != null)
          timer.cancel();
 
-      timer = new Timer() {
+      final RegexRequest update = new RegexRequest(text.getText(), regex.getText(), replacement.getText());
+      if (!update.equals(request))
+      {
+         request = update;
+         timer = new Timer() {
 
-         @Override
-         public void run()
-         {
-            timer = null;
-            parser.call(callback, errorCallback)
-                     .parse(new RegexRequest(text.getText(), regex.getText(), replacement.getText()));
-
-         }
-      };
-
-      timer.schedule(200);
+            @Override
+            public void run()
+            {
+               timer = null;
+               parser.call(callback, errorCallback).parse(request);
+            }
+         };
+      }
+      timer.schedule(TIMEOUT);
 
    }
 
@@ -114,6 +120,8 @@ public class App extends Composite
       else
       {
          error.setVisible(false);
+
+         result.getElement().setInnerHTML(highlighter.highlight(event.getText(), event));
          if (event.isMatches())
          {
             result.addStyleName("matches");
