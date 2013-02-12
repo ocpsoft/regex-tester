@@ -16,18 +16,22 @@
 package org.ocpsoft.tutorial.regex.client.local;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.event.Event;
-import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import org.jboss.errai.bus.client.api.ErrorCallback;
+import org.jboss.errai.bus.client.api.Message;
+import org.jboss.errai.bus.client.api.RemoteCallback;
+import org.jboss.errai.ioc.client.api.Caller;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
+import org.ocpsoft.tutorial.regex.client.shared.RegexParser;
 import org.ocpsoft.tutorial.regex.client.shared.RegexRequest;
 import org.ocpsoft.tutorial.regex.client.shared.RegexResult;
 
 import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -57,22 +61,75 @@ public class App extends Composite
    private Label result;
 
    @Inject
-   private Event<RegexRequest> requestEvent;
+   @DataField
+   private Label replaced;
+
+   @Inject
+   @DataField
+   private Label error;
+
+   @PostConstruct
+   private final void init()
+   {
+      error.setVisible(false);
+      replaced.setVisible(false);
+   }
+
+   @Inject
+   private Caller<RegexParser> parser;
+   private Timer timer;
 
    @EventHandler({ "text", "regex", "replacement" })
    void handleUpdate(KeyUpEvent event)
    {
-      requestEvent.fire(new RegexRequest(text.getText(), regex.getText(), replacement.getText()));
+      result.setText(text.getText());
+
+      if (timer != null)
+         timer.cancel();
+
+      timer = new Timer() {
+
+         @Override
+         public void run()
+         {
+            timer = null;
+            parser.call(callback, errorCallback)
+                     .parse(new RegexRequest(text.getText(), regex.getText(), replacement.getText()));
+
+         }
+      };
+
+      timer.schedule(200);
+
    }
 
-   public void handleResult(@Observes RegexResult event)
+   public void handleResult(RegexResult event)
    {
-      if (event.isMatches())
-         result.addStyleName("matches");
-      else
+      if (event.getError() != null && !event.getError().isEmpty())
+      {
+         error.setText(event.getError());
+         error.setVisible(true);
          result.removeStyleName("matches");
+      }
+      else
+      {
+         error.setVisible(false);
+         if (event.isMatches())
+         {
+            result.addStyleName("matches");
+         }
+         else
+            result.removeStyleName("matches");
+      }
 
-      result.setText(event.getText());
+      if (event.getText() != null && !event.getText().isEmpty())
+      {
+         replaced.setText(event.getText());
+         replaced.setVisible(true);
+      }
+      else
+         replaced.setVisible(false);
+
    }
 
    @PostConstruct
@@ -80,5 +137,20 @@ public class App extends Composite
    {
       RootPanel.get().add(this);
    }
+
+   RemoteCallback<RegexResult> callback = new RemoteCallback<RegexResult>() {
+      public void callback(RegexResult value)
+      {
+         handleResult(value);
+      }
+   };
+
+   ErrorCallback errorCallback = new ErrorCallback() {
+      @Override
+      public boolean error(Message message, Throwable throwable)
+      {
+         return false;
+      }
+   };
 
 }

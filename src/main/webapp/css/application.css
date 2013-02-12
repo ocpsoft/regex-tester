@@ -8,19 +8,41 @@
 /*
  * Application styles
  */
-
-input, .result {
-	padding: 10px;
-	font-size: 26px;
+body {
 	font-family: monospace;
 }
 
-.matches {
-	line-height: 27px;
-	background-color: #D9FFE5;
+h1 {
+	font-size: 40px;
+}
+
+input {
+	display: block;
+	width: 100%;
+	min-height: 45px;
+	box-sizing: border-box;
+}
+
+input,.result,.error,.replaced {
 	padding: 10px;
+	font-size: 26px;
+	line-height: 30px;
+	font-family: monospace;
+}
+
+.error {
+	background-color: #FFB3B3;
 }
 
 .inputs {
 	margin-top: 50px;
+	margin-bottom: 25px;
+}
+
+.matches {
+	background-color: #D9FFE5;
+}
+
+.replaced {
+	background-color: #D6E0FF;
 }

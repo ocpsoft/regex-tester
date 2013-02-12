@@ -3,9 +3,9 @@ package org.ocpsoft.tutorial.regex.server;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class RegexListenerTest
+public class RegexParserImplTest
 {
-   private RegexListener l = new RegexListener();
+   private RegexParserImpl l = new RegexParserImpl();
 
    @Test(expected = RegexException.class)
    public void testSingleCharBackslash()

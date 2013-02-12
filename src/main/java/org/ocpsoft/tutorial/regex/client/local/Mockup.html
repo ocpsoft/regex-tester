@@ -36,22 +36,20 @@
 	<div data-field="app-template" class="container">
 		<div class="row inputs">
 			<div class="span8 cols offset2">
-				<h1 style="margin-top: 50px; margin-bottom: 25px;">Java Regex Tester</h1>
-				<label for="text">Target text</label>
-				<input data-field="text" type="text" name="text" tabindex="1" autofocus="autofocus" style="width: 100%">
-				<br/><br/>
-				<label for="regex">Regular expression pattern</label>
-				<input data-field="regex" type="text" name="regex" tabindex="2" style="width: 100%">
-				<br/><br/>
-				
-				<label for="regex">Replacement (optional)</label>
-				<input data-field="replacement" type="text" name="replacement" tabindex="3" style="width: 100%">
-				<br/><br/>
+				<form onsubmit="false">
+					<fieldset>
+						<center><h1 style="margin-top: 50px; margin-bottom: 25px;">Java Regex Tester</h1></center>
+						<input data-field="text" placeholder="Target text" type="text" name="text" tabindex="1" autofocus="autofocus">
+						<input data-field="regex" placeholder="Regular expression" type="text" name="regex" tabindex="2" style="width: 100%">
+						<input data-field="replacement" placeholder="Replacement (optional)" type="text" name="replacement" tabindex="3" style="width: 100%">
+					</fieldset>
+				</form>
 			</div>
 		</div>
 		<div class="row">
-			<div data-field="result" class="span8 cols offset2 result">
-			</div>
+			<div data-field="result" class="span8 cols offset2 result"></div>
+			<div data-field="replaced" class="span8 cols offset2 replaced result"></div>
+			<div data-field="error" class="span8 cols offset2 error"></div>
 		</div>
 
 	</div>
