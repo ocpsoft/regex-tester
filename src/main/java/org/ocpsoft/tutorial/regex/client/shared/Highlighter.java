@@ -11,7 +11,16 @@ public final class Highlighter
    private static final String COLOR_END = "</span>";
 
    int colorIndex = 0;
-   private List<String> colors = Arrays.asList("8b008b", "ff8c00", "ff1493", "b22222", "1e90ff", "ff4500", "daa520");
+   private List<String> colors = Arrays.asList(
+            "8b008b",
+            "ff8c00",
+            "0099ff",
+            "ff1493",
+            "b22222",
+            "1e90ff",
+            "ff4500",
+            "daa520"
+            );
 
    public String highlight(String text, RegexResult event)
    {
@@ -54,14 +63,12 @@ public final class Highlighter
 
    private int level(List<Group> seen, Group group)
    {
-      List<Group> temp = new ArrayList<Group>(seen);
-      Collections.reverse(seen);
-
-      for (Group s : temp) {
-         if (s.getStart() >= group.getStart() && s.getEnd() <= group.getEnd() && group != s)
-            return 1 + level(seen, s);
+      int result = 0;
+      for (Group s : seen) {
+         if (group.getStart() <= s.getStart() && s.getEnd() <= group.getEnd() && group != s)
+            result++;
       }
-      return 0;
+      return result;
    }
 
 }

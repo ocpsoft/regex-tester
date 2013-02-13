@@ -79,7 +79,7 @@ public class App extends Composite
       error.setVisible(false);
       replaced.setVisible(false);
    }
-   
+
    @Override
    protected void onAttach()
    {
@@ -106,7 +106,16 @@ public class App extends Composite
       if (timer != null)
          timer.cancel();
 
-      final RegexRequest update = new RegexRequest(text.getText(), regex.getText(), replacement.getText());
+      final RegexRequest update = new RegexRequest(
+               text.getText(),
+               regex.getText(),
+               replacement.getText()
+
+               // JsonUtils.escapeValue(text.getText()),
+               // JsonUtils.escapeValue(regex.getText()),
+               // JsonUtils.escapeValue(replacement.getText())
+               );
+
       if (!update.equals(request))
       {
          request = update;
