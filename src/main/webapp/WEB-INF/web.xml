@@ -14,4 +14,9 @@
       <load-on-startup>1</load-on-startup>
    </servlet>
 
+   <servlet-mapping>
+      <servlet-name>ErraiServlet</servlet-name>
+      <url-pattern>*.erraiBus</url-pattern>
+   </servlet-mapping>
+
 </web-app>

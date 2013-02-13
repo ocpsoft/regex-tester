@@ -34,6 +34,10 @@ input,textarea,.result,.error,.replaced {
 	box-sizing: border-box;
 }
 
+.faded {
+	opacity: .5;
+}
+
 .error {
 	background-color: #FFB3B3;
 }
