@@ -45,7 +45,7 @@ import com.google.gwt.user.client.ui.TextArea;
 @Templated("Mockup.html#app-template")
 public class App extends Composite
 {
-   private static final int TIMEOUT = 150;
+   private static final int DELAY = 250;
 
    Highlighter highlighter = new Highlighter();
 
@@ -103,9 +103,6 @@ public class App extends Composite
    @EventHandler({ "text", "regex", "replacement" })
    void handleUpdate(KeyUpEvent event)
    {
-      if (timer != null)
-         timer.cancel();
-
       final RegexRequest update = new RegexRequest(
                text.getText(),
                regex.getText(),
@@ -115,6 +112,9 @@ public class App extends Composite
       if (!update.equals(request))
       {
          request = update;
+         if (timer != null)
+            timer.cancel();
+
          timer = new Timer() {
 
             @Override
@@ -124,8 +124,9 @@ public class App extends Composite
                parser.call(callback, errorCallback).parse(request);
             }
          };
+
+         timer.schedule(DELAY);
       }
-      timer.schedule(TIMEOUT);
 
    }
 
