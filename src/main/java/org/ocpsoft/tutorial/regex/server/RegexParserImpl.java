@@ -48,17 +48,20 @@ public class RegexParserImpl implements RegexParser
          List<CapturingGroup> captures = parseRegex(regex);
 
          matcher.reset();
-         while (matcher.find())
+         if (regex != null && !regex.isEmpty())
          {
-            Group defaultGroup = new Group(regex, matcher.start(), matcher.end());
-            result.getGroups().add(defaultGroup);
-            for (int i = 0; i < matcher.groupCount(); i++)
+            while (matcher.find())
             {
-               int start = matcher.start(i + 1);
-               int end = matcher.end(i + 1);
-               if (defaultGroup.getStart() != start || defaultGroup.getEnd() != end)
+               Group defaultGroup = new Group(regex, matcher.start(), matcher.end());
+               result.getGroups().add(defaultGroup);
+               for (int i = 0; i < matcher.groupCount(); i++)
                {
-                  result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
+                  int start = matcher.start(i + 1);
+                  int end = matcher.end(i + 1);
+                  if (defaultGroup.getStart() != start || defaultGroup.getEnd() != end)
+                  {
+                     result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
+                  }
                }
             }
          }

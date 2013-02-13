@@ -110,10 +110,6 @@ public class App extends Composite
                text.getText(),
                regex.getText(),
                replacement.getText()
-
-               // JsonUtils.escapeValue(text.getText()),
-               // JsonUtils.escapeValue(regex.getText()),
-               // JsonUtils.escapeValue(replacement.getText())
                );
 
       if (!update.equals(request))
