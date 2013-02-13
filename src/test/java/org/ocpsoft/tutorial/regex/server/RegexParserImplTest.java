@@ -29,7 +29,7 @@ public class RegexParserImplTest
    {
       String text = "the quick brown fox jumped over the lazy dog";
       RegexResult result = l
-               .parse(new RegexRequest(text, "\\\\w+ ?", "x"));
+               .parse(new RegexRequest(text, "\\w+ ?", "x"));
 
       Assert.assertNull(result.getError());
       Assert.assertEquals(9, result.getGroups().size());
@@ -55,7 +55,7 @@ public class RegexParserImplTest
    {
       String text = "the quick brown fox";
       RegexResult result = l
-               .parse(new RegexRequest(text, "(\\\\w+ (\\\\w+))",
+               .parse(new RegexRequest(text, "(\\w+ (\\w+))",
                         "$1 $2"));
 
       Assert.assertNull(result.getError());
@@ -79,7 +79,7 @@ public class RegexParserImplTest
    {
       String text = "the quick brown fox ";
       RegexResult result = l
-               .parse(new RegexRequest(text, "(\\\\w+ (\\\\w+)) ",
+               .parse(new RegexRequest(text, "(\\w+ (\\w+)) ",
                         "$1 $2 "));
 
       Assert.assertNull(result.getError());
@@ -108,7 +108,7 @@ public class RegexParserImplTest
    {
       String text = "the quick brown fox jumped over the lazy dog";
       RegexResult result = l
-               .parse(new RegexRequest(text, "\\\\w+ (\\\\w+ \\\\w+ \\\\w+ \\\\w+ (\\\\w+ \\\\w+ \\\\w+)) (\\\\w+)",
+               .parse(new RegexRequest(text, "\\w+ (\\w+ \\w+ \\w+ \\w+ (\\w+ \\w+ \\w+)) (\\w+)",
                         "$1 $3"));
 
       Assert.assertNull(result.getError());
@@ -152,7 +152,7 @@ public class RegexParserImplTest
    public void testResultsHighlightImplicitGroups() throws Exception
    {
       String text = "the quick brown fox ";
-      RegexResult result = l.parse(new RegexRequest(text, "(\\\\w+ (\\\\w+)) ", "$1 $2"));
+      RegexResult result = l.parse(new RegexRequest(text, "(\\w+ (\\w+)) ", "$1 $2"));
 
       String highlighted = new Highlighter().highlight(text, result);
       Assert.assertEquals("<span style=\"color: #ff8c00\" class=\"highlight\">" +
@@ -166,73 +166,73 @@ public class RegexParserImplTest
    }
 
    @Test(expected = RegexException.class)
-   public void testSingleCharBackslash()
+   public void testJavaModeSingleCharBackslash()
    {
       l.javaMode("\\");
    }
 
    @Test(expected = RegexException.class)
-   public void testSingleBackslashWithToken()
+   public void testJavaModeSingleBackslashWithToken()
    {
       l.javaMode("\\w");
    }
 
    @Test(expected = RegexException.class)
-   public void testSingleCharBackslashBeforeValidEscape()
+   public void testJavaModeSingleCharBackslashBeforeValidEscape()
    {
       l.javaMode("\\asdf\\\\");
    }
 
    @Test(expected = RegexException.class)
-   public void testMiddleCharBackslash()
+   public void testJavaModeMiddleCharBackslash()
    {
       l.javaMode("something\\else");
    }
 
    @Test(expected = RegexException.class)
-   public void testMiddleCharBackslashAfterValidEscape()
+   public void testJavaModeMiddleCharBackslashAfterValidEscape()
    {
       l.javaMode("asdf\\\\something\\else");
    }
 
    @Test(expected = RegexException.class)
-   public void testLastCharBackslash()
+   public void testJavaModeLastCharBackslash()
    {
       l.javaMode("something\\");
    }
 
    @Test(expected = RegexException.class)
-   public void testLastCharBackslashAfterValidEscape()
+   public void testJavaModeLastCharBackslashAfterValidEscape()
    {
       l.javaMode("first\\\\something\\");
    }
 
    @Test
-   public void testCanonicalizationSingle() throws Exception
+   public void testJavaModeCanonicalizationSingle() throws Exception
    {
       Assert.assertEquals("\\", l.javaMode("\\\\"));
    }
 
    @Test
-   public void testCanonicalizationFirst() throws Exception
+   public void testJavaModeCanonicalizationFirst() throws Exception
    {
       Assert.assertEquals("\\something", l.javaMode("\\\\something"));
    }
 
    @Test
-   public void testCanonicalizationMiddle() throws Exception
+   public void testJavaModeCanonicalizationMiddle() throws Exception
    {
       Assert.assertEquals("first\\something", l.javaMode("first\\\\something"));
    }
 
    @Test
-   public void testCanonicalizationLast() throws Exception
+   public void testJavaModeCanonicalizationLast() throws Exception
    {
       Assert.assertEquals("something\\", l.javaMode("something\\\\"));
    }
 
    @Test
-   public void testCanonicalizationMultiple() throws Exception
+   public void testJavaModeCanonicalizationMultiple() throws Exception
    {
       Assert.assertEquals("something\\last\\", l.javaMode("something\\\\last\\\\"));
    }

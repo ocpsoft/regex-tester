@@ -27,17 +27,17 @@ public class RegexParserImpl implements RegexParser
 
       Matcher matcher = null;
 
+      String replacement = request.getReplacement();
       String regex = request.getRegex();
       if (request.getText() != null && !request.getText().isEmpty())
       {
          try {
-            regex = javaMode(request.getRegex());
             if (regex != null)
             {
                matcher = Pattern.compile(regex).matcher(request.getText());
                result.setMatches(matcher.matches());
-               if (request.getReplacement() != null && !request.getReplacement().isEmpty())
-                  result.setReplaced(matcher.replaceAll(javaMode(request.getReplacement())));
+               if (replacement != null && !replacement.isEmpty())
+                  result.setReplaced(matcher.replaceAll(replacement));
             }
          }
          catch (Exception e) {
@@ -83,33 +83,7 @@ public class RegexParserImpl implements RegexParser
       return result;
    }
 
-   private List<CapturingGroup> parseRegex(String regex)
-   {
-      List<CapturingGroup> captures = new ArrayList<ParseTools.CapturingGroup>();
-      char[] chars = regex.toCharArray();
-      if (chars.length > 0)
-      {
-         int cursor = 0;
-         while (cursor < chars.length)
-         {
-            switch (chars[cursor])
-            {
-            case '(':
-               CapturingGroup group = ParseTools.balancedCapture(chars, cursor, chars.length - 1, CaptureType.PAREN);
-               captures.add(group);
-
-               break;
-
-            default:
-               break;
-            }
-
-            cursor++;
-         }
-      }
-      return captures;
-   }
-
+   // TODO add this as an option?
    public String javaMode(String regex)
    {
       StringBuilder result = new StringBuilder();
@@ -141,4 +115,32 @@ public class RegexParserImpl implements RegexParser
       }
       return result.toString().replaceAll("\\\\\\\\", "\\\\");
    }
+
+   private List<CapturingGroup> parseRegex(String regex)
+   {
+      List<CapturingGroup> captures = new ArrayList<ParseTools.CapturingGroup>();
+      char[] chars = regex.toCharArray();
+      if (chars.length > 0)
+      {
+         int cursor = 0;
+         while (cursor < chars.length)
+         {
+            switch (chars[cursor])
+            {
+            case '(':
+               CapturingGroup group = ParseTools.balancedCapture(chars, cursor, chars.length - 1, CaptureType.PAREN);
+               captures.add(group);
+
+               break;
+
+            default:
+               break;
+            }
+
+            cursor++;
+         }
+      }
+      return captures;
+   }
+
 }

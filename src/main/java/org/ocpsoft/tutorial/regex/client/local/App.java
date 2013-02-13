@@ -18,10 +18,9 @@ package org.ocpsoft.tutorial.regex.client.local;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.jboss.errai.bus.client.api.ErrorCallback;
-import org.jboss.errai.bus.client.api.Message;
-import org.jboss.errai.bus.client.api.RemoteCallback;
-import org.jboss.errai.ioc.client.api.Caller;
+import org.jboss.errai.common.client.api.Caller;
+import org.jboss.errai.common.client.api.ErrorCallback;
+import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
@@ -78,6 +77,8 @@ public class App extends Composite
    {
       error.setVisible(false);
       replaced.setVisible(false);
+      RootPanel.get().add(this);
+
    }
 
    @Override
@@ -161,12 +162,6 @@ public class App extends Composite
 
    }
 
-   @PostConstruct
-   public void setup()
-   {
-      RootPanel.get().add(this);
-   }
-
    RemoteCallback<RegexResult> callback = new RemoteCallback<RegexResult>() {
       public void callback(RegexResult value)
       {
@@ -174,9 +169,9 @@ public class App extends Composite
       }
    };
 
-   ErrorCallback errorCallback = new ErrorCallback() {
+   ErrorCallback<Object> errorCallback = new ErrorCallback<Object>() {
       @Override
-      public boolean error(Message message, Throwable throwable)
+      public boolean error(Object message, Throwable throwable)
       {
          return false;
       }
