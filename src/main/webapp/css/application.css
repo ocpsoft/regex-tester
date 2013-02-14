@@ -14,13 +14,7 @@ body {
 
 h1 {
 	font-size: 40px;
-}
-
-input,textarea {
-	display: block;
-	width: 100%;
-	min-height: 51px;
-	box-sizing: border-box;
+	margin-bottom: 25px;
 }
 
 input,textarea,.result,.error,.replaced {
@@ -31,11 +25,23 @@ input,textarea,.result,.error,.replaced {
 	white-space: pre-wrap;
 	overflow: hidden;
 	word-wrap: break-word;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+}
+
+input,textarea {
+	display: block;
+	width: 100%;
+	min-height: 51px;
 }
 
 .faded {
 	opacity: .5;
+}
+
+.footer {
+	margin-top: 50px;
 }
 
 .error {
