@@ -42,7 +42,6 @@ public class RegexParserImpl implements RegexParser
          }
          catch (Exception e) {
             result.setError(e.getMessage());
-            return result;
          }
 
          List<CapturingGroup> captures = parseRegex(regex);

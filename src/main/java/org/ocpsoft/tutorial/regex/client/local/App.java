@@ -44,7 +44,7 @@ import com.google.gwt.user.client.ui.TextArea;
 @Templated("Mockup.html#app-template")
 public class App extends Composite
 {
-   private static final int DELAY = 250;
+   private static final int DELAY = 200;
 
    Highlighter highlighter = new Highlighter();
 
@@ -140,9 +140,10 @@ public class App extends Composite
          result.removeStyleName("matches");
       }
       else
-      {
          error.setVisible(false);
 
+      if (event.getText() != null && !event.getText().isEmpty())
+      {
          result.getElement().setInnerHTML(highlighter.highlight(event.getText(), event));
          if (event.isMatches())
          {
@@ -151,6 +152,8 @@ public class App extends Composite
          else
             result.removeStyleName("matches");
       }
+      else
+         result.setVisible(false);
 
       if (event.getReplaced() != null && !event.getReplaced().isEmpty())
       {
