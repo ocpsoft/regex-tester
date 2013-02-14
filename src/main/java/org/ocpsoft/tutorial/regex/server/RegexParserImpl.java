@@ -11,6 +11,7 @@ import org.ocpsoft.tutorial.regex.client.shared.Group;
 import org.ocpsoft.tutorial.regex.client.shared.RegexParser;
 import org.ocpsoft.tutorial.regex.client.shared.RegexRequest;
 import org.ocpsoft.tutorial.regex.client.shared.RegexResult;
+import org.ocpsoft.tutorial.regex.server.ParseTools.CaptureFilter;
 import org.ocpsoft.tutorial.regex.server.ParseTools.CaptureType;
 import org.ocpsoft.tutorial.regex.server.ParseTools.CapturingGroup;
 
@@ -43,13 +44,32 @@ public class RegexParserImpl implements RegexParser
             result.setError(e.getMessage());
          }
 
-         List<CapturingGroup> captures = ParseTools.extractCaptures(CaptureType.PAREN, regex);
+         List<CapturingGroup> captures = ParseTools.extractCaptures(CaptureType.PAREN, regex, new CaptureFilter() {
+            @Override
+            public boolean accept(CapturingGroup group)
+            {
+               String captured = new String(group.getCaptured());
+               return !captured.startsWith("?");
+            }
+         });
 
          if (matcher != null)
          {
             matcher.reset();
-            if (regex != null && !regex.isEmpty())
+            if (matcher.matches())
             {
+               result.getGroups().clear();
+               for (int i = 0; i < matcher.groupCount(); i++)
+               {
+                  int start = matcher.start(i + 1);
+                  int end = matcher.end(i + 1);
+                  if (start != -1 && end != -1)
+                     result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
+               }
+            }
+            else
+            {
+               matcher.reset();
                while (matcher.find())
                {
                   Group defaultGroup = new Group(regex, matcher.start(), matcher.end());
@@ -64,19 +84,6 @@ public class RegexParserImpl implements RegexParser
                         result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
                      }
                   }
-               }
-            }
-
-            matcher.reset();
-            if (matcher.matches())
-            {
-               result.getGroups().clear();
-               for (int i = 0; i < matcher.groupCount(); i++)
-               {
-                  int start = matcher.start(i + 1);
-                  int end = matcher.end(i + 1);
-                  if (start != -1 && end != -1)
-                     result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
                }
             }
          }

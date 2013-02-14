@@ -76,6 +76,31 @@ public class RegexParserImplTest
    }
 
    @Test
+   public void testFindGroupsExcludesNonCapturingGroups() throws Exception
+   {
+      String text = "12";
+      RegexResult result = l.parse(new RegexRequest(text, "(?=(1))(12)", "$1"));
+
+      Assert.assertNull(result.getError());
+      Assert.assertEquals(2, result.getGroups().size());
+
+      Assert.assertEquals("1", result.getReplaced());
+
+      Group group = result.getGroups().get(0);
+      Assert.assertEquals(0, group.getStart());
+      Assert.assertEquals(1, group.getEnd());
+      Assert.assertEquals("1", group.getFragment());
+      Assert.assertEquals("1", text.substring(group.getStart(), group.getEnd()));
+
+      group = result.getGroups().get(1);
+      Assert.assertEquals("12", group.getFragment());
+      Assert.assertEquals(0, group.getStart());
+      Assert.assertEquals(2, group.getEnd());
+      Assert.assertEquals("12", text.substring(group.getStart(), group.getEnd()));
+
+   }
+
+   @Test
    public void testImplicitNestedGroups() throws Exception
    {
       String text = "the quick brown fox";

@@ -133,7 +133,7 @@ public abstract class ParseTools
       @Override
       public String toString()
       {
-         return "CapturingGroup [start=" + start + ", end=" + end + "]";
+         return "CapturingGroup [" + new String(getCaptured()) + ", start=" + start + ", end=" + end + "]";
       }
    }
 
@@ -161,6 +161,11 @@ public abstract class ParseTools
       }
    }
 
+   public interface CaptureFilter
+   {
+      public boolean accept(CapturingGroup group);
+   }
+
    public static List<CapturingGroup> extractCaptures(CaptureType type, String value)
    {
       List<CapturingGroup> captures = new ArrayList<ParseTools.CapturingGroup>();
@@ -175,5 +180,17 @@ public abstract class ParseTools
          }
       }
       return captures;
+   }
+
+   public static List<CapturingGroup> extractCaptures(CaptureType type, String value, CaptureFilter filter)
+   {
+      List<CapturingGroup> result = new ArrayList<ParseTools.CapturingGroup>();
+      List<CapturingGroup> captures = extractCaptures(type, value);
+      if (filter != null)
+         for (CapturingGroup group : captures) {
+            if (filter.accept(group))
+               result.add(group);
+         }
+      return result;
    }
 }

@@ -54,4 +54,19 @@ public class HighlighterTest
                "<span style=\"color: #8b008b\" class=\"highlight\"></span>", highlighted);
    }
 
+   @Test
+   public void testResultsHighlightOmitsNonCapturingGroups() throws Exception
+   {
+      String text = "12";
+      RegexResult result = l.parse(new RegexRequest(text, "(?=(1))(12)", "$1"));
+
+      Highlighter highlighter = new Highlighter();
+      String highlighted = highlighter.highlight(text, result);
+      Assert.assertEquals("", highlighted);
+      Assert.assertEquals("<span style=\"color: #ff8c00\" class=\"highlight\">" +
+               "<span style=\"color: #8b008b\" class=\"highlight\">1" +
+               "</span>2" +
+               "</span>", highlighted);
+   }
+
 }
