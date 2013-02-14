@@ -37,6 +37,20 @@ public class RegexParserImplTest
    }
 
    @Test
+   public void testRegexRequestOptionalTwoWordsReturnsOnlyLastGroupValue() throws Exception
+   {
+      String text = "two words";
+      String pattern = "(\\w+ ?)+";
+      String replacement = "1";
+      RegexResult result = l.parse(new RegexRequest(text, pattern, replacement));
+
+      Assert.assertNull(result.getError());
+      Assert.assertEquals(text.replaceAll(pattern, replacement), result.getReplaced());
+
+      Assert.assertEquals(1, result.getGroups().size());
+   }
+
+   @Test
    public void testFindGroups() throws Exception
    {
       String text = "the quick brown fox jumped over the lazy dog";
