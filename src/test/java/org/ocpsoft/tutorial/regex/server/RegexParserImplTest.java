@@ -15,8 +15,7 @@ public class RegexParserImplTest
    public void testRegexRequest() throws Exception
    {
       String text = "the quick brown fox jumped over the lazy dog";
-      RegexResult result = l
-               .parse(new RegexRequest(text, ".+", "replacement"));
+      RegexResult result = l.parse(new RegexRequest(text, ".+", "replacement"));
 
       Assert.assertNull(result.getError());
       Assert.assertEquals("replacement", result.getReplaced());
@@ -25,11 +24,24 @@ public class RegexParserImplTest
    }
 
    @Test
+   public void testRegexRequestOptional() throws Exception
+   {
+      String text = "x";
+      String pattern = "(\\.)?";
+      String replacement = "replacement";
+      RegexResult result = l.parse(new RegexRequest(text, pattern, replacement));
+
+      Assert.assertNull(result.getError());
+      Assert.assertEquals(text.replaceAll(pattern, replacement), result.getReplaced());
+
+      Assert.assertEquals(4, result.getGroups().size());
+   }
+
+   @Test
    public void testFindGroups() throws Exception
    {
       String text = "the quick brown fox jumped over the lazy dog";
-      RegexResult result = l
-               .parse(new RegexRequest(text, "\\w+ ?", "x"));
+      RegexResult result = l.parse(new RegexRequest(text, "\\w+ ?", "x"));
 
       Assert.assertNull(result.getError());
       Assert.assertEquals(9, result.getGroups().size());
@@ -54,9 +66,7 @@ public class RegexParserImplTest
    public void testImplicitNestedGroups() throws Exception
    {
       String text = "the quick brown fox";
-      RegexResult result = l
-               .parse(new RegexRequest(text, "(\\w+ (\\w+))",
-                        "$1 $2"));
+      RegexResult result = l.parse(new RegexRequest(text, "(\\w+ (\\w+))", "$1 $2"));
 
       Assert.assertNull(result.getError());
       Assert.assertEquals("the quick quick brown fox fox", result.getReplaced());
@@ -78,9 +88,7 @@ public class RegexParserImplTest
    public void testImplicitNestedGroupsNonDefault() throws Exception
    {
       String text = "the quick brown fox ";
-      RegexResult result = l
-               .parse(new RegexRequest(text, "(\\w+ (\\w+)) ",
-                        "$1 $2 "));
+      RegexResult result = l.parse(new RegexRequest(text, "(\\w+ (\\w+)) ", "$1 $2 "));
 
       Assert.assertNull(result.getError());
       Assert.assertEquals("the quick quick brown fox fox ", result.getReplaced());
@@ -108,8 +116,7 @@ public class RegexParserImplTest
    {
       String text = "the quick brown fox jumped over the lazy dog";
       RegexResult result = l
-               .parse(new RegexRequest(text, "\\w+ (\\w+ \\w+ \\w+ \\w+ (\\w+ \\w+ \\w+)) (\\w+)",
-                        "$1 $3"));
+               .parse(new RegexRequest(text, "\\w+ (\\w+ \\w+ \\w+ \\w+ (\\w+ \\w+ \\w+)) (\\w+)", "$1 $3"));
 
       Assert.assertNull(result.getError());
       Assert.assertEquals("quick brown fox jumped over the lazy dog", result.getReplaced());
@@ -156,13 +163,13 @@ public class RegexParserImplTest
 
       String highlighted = new Highlighter().highlight(text, result);
       Assert.assertEquals("<span style=\"color: #ff8c00\" class=\"highlight\">" +
-      		"<span style=\"color: #daa520\" class=\"highlight\">the " +
-      		"<span style=\"color: #1e90ff\" class=\"highlight\">quick" +
-      		"</span></span> </span>" +
-      		"<span style=\"color: #b22222\" class=\"highlight\">" +
-      		"<span style=\"color: #0099ff\" class=\"highlight\">brown " +
-      		"<span style=\"color: #8b008b\" class=\"highlight\">fox" +
-      		"</span></span> </span>", highlighted);
+               "<span style=\"color: #daa520\" class=\"highlight\">the " +
+               "<span style=\"color: #1e90ff\" class=\"highlight\">quick" +
+               "</span></span> </span>" +
+               "<span style=\"color: #b22222\" class=\"highlight\">" +
+               "<span style=\"color: #0099ff\" class=\"highlight\">brown " +
+               "<span style=\"color: #8b008b\" class=\"highlight\">fox" +
+               "</span></span> </span>", highlighted);
    }
 
    @Test(expected = RegexException.class)
