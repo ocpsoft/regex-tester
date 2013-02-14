@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.ocpsoft.tutorial.regex.client.shared.Group;
 import org.ocpsoft.tutorial.regex.client.shared.RegexRequest;
 import org.ocpsoft.tutorial.regex.client.shared.RegexResult;
-import org.ocpsoft.tutorial.regex.client.shared.Highlighter;
 
 public class RegexParserImplTest
 {
@@ -34,7 +33,7 @@ public class RegexParserImplTest
       Assert.assertNull(result.getError());
       Assert.assertEquals(text.replaceAll(pattern, replacement), result.getReplaced());
 
-      Assert.assertEquals(4, result.getGroups().size());
+      Assert.assertEquals(2, result.getGroups().size());
    }
 
    @Test
@@ -137,39 +136,6 @@ public class RegexParserImplTest
       Assert.assertEquals(text.length(), group.getEnd());
 
       Assert.assertEquals(3, result.getGroups().size());
-   }
-
-   @Test
-   public void testResultsHighlightExplicitGroups() throws Exception
-   {
-      String text = "the quick brown fox";
-      RegexResult result = l.parse(new RegexRequest(text, ".+(quick).+(fo(x))", "$1 $3"));
-
-      String highlighted = new Highlighter().highlight(text, result);
-      Assert.assertEquals(
-               "the <span style=\"color: #ff1493\" class=\"highlight\">quick</span> brown " +
-                        "<span style=\"color: #0099ff\" class=\"highlight\">fo" +
-                        "<span style=\"color: #8b008b\" class=\"highlight\">x" +
-                        "</span>" +
-                        "</span>",
-               highlighted);
-   }
-
-   @Test
-   public void testResultsHighlightImplicitGroups() throws Exception
-   {
-      String text = "the quick brown fox ";
-      RegexResult result = l.parse(new RegexRequest(text, "(\\w+ (\\w+)) ", "$1 $2"));
-
-      String highlighted = new Highlighter().highlight(text, result);
-      Assert.assertEquals("<span style=\"color: #ff8c00\" class=\"highlight\">" +
-               "<span style=\"color: #daa520\" class=\"highlight\">the " +
-               "<span style=\"color: #1e90ff\" class=\"highlight\">quick" +
-               "</span></span> </span>" +
-               "<span style=\"color: #b22222\" class=\"highlight\">" +
-               "<span style=\"color: #0099ff\" class=\"highlight\">brown " +
-               "<span style=\"color: #8b008b\" class=\"highlight\">fox" +
-               "</span></span> </span>", highlighted);
    }
 
    @Test(expected = RegexException.class)

@@ -58,7 +58,8 @@ public class RegexParserImpl implements RegexParser
                {
                   int start = matcher.start(i + 1);
                   int end = matcher.end(i + 1);
-                  if (defaultGroup.getStart() != start || defaultGroup.getEnd() != end)
+                  if ((start != -1 && end != -1) &&
+                           (defaultGroup.getStart() != start || defaultGroup.getEnd() != end))
                   {
                      result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
                   }
@@ -72,11 +73,10 @@ public class RegexParserImpl implements RegexParser
             result.getGroups().clear();
             for (int i = 0; i < matcher.groupCount(); i++)
             {
-               result.getGroups().add(new Group(
-                        new String(captures.get(i).getCaptured()),
-                        matcher.start(i + 1),
-                        matcher.end(i + 1))
-                        );
+               int start = matcher.start(i + 1);
+               int end = matcher.end(i + 1);
+               if (start != -1 && end != -1)
+                  result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
             }
          }
       }
