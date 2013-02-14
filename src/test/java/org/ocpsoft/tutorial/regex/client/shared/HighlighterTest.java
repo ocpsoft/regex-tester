@@ -62,8 +62,7 @@ public class HighlighterTest
 
       Highlighter highlighter = new Highlighter();
       String highlighted = highlighter.highlight(text, result);
-      Assert.assertEquals("", highlighted);
-      Assert.assertEquals("<span style=\"color: #ff8c00\" class=\"highlight\">" +
+      Assert.assertEquals("<span style=\"color: #0099ff\" class=\"highlight\">" +
                "<span style=\"color: #8b008b\" class=\"highlight\">1" +
                "</span>2" +
                "</span>", highlighted);

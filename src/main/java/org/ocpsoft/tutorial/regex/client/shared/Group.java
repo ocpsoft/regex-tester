@@ -4,7 +4,7 @@ import org.jboss.errai.common.client.api.annotations.Portable;
 import org.jboss.errai.marshalling.client.api.annotations.MapsTo;
 
 @Portable
-public class Group
+public class Group implements Comparable<Group>
 {
    private String fragment;
    private int start;
@@ -68,4 +68,36 @@ public class Group
       return true;
    }
 
+   /**
+    * @return -1 when this object should be processed before the other
+    * 0 when this object is the same as the other
+    * 1 when this object should be processed after the other 
+    */
+   @Override
+   public int compareTo(Group o)
+   {
+      if(o == null)
+         return 1;
+      
+      if(start < o.getStart())
+            return 1;
+      
+      if(start == o.getStart())
+      {
+         if(end > o.getEnd())
+            return 1;
+         else if(end < o.getEnd())
+            return -1;
+      }
+
+      if(start > o.getStart())
+      {
+         if(end < o.getEnd())
+            return -1;
+         if(end > o.getEnd())
+            return 1;
+      }
+      
+      return 0;
+   }
 }

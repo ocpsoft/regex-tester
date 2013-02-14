@@ -30,7 +30,8 @@ public final class Highlighter
       {
          colorIndex = 0;
          List<Group> groups = new ArrayList<Group>(event.getGroups());
-         Collections.reverse(groups);
+         
+         Collections.sort(groups);
 
          List<Group> seen = new ArrayList<Group>();
 
