@@ -15,7 +15,9 @@
  */
 package org.ocpsoft.tutorial.regex.server;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
@@ -157,5 +159,21 @@ public abstract class ParseTools
       {
          return end;
       }
+   }
+
+   public static List<CapturingGroup> extractCaptures(CaptureType type, String value)
+   {
+      List<CapturingGroup> captures = new ArrayList<ParseTools.CapturingGroup>();
+      char[] chars = value.toCharArray();
+      if (chars.length > 1)
+      {
+         for (int cursor = 0; cursor < chars.length; cursor++)
+         {
+            char curr = chars[cursor];
+            if (curr == type.getBegin())
+               captures.add(ParseTools.balancedCapture(chars, cursor, chars.length - 1, type));
+         }
+      }
+      return captures;
    }
 }

@@ -1,6 +1,5 @@
 package org.ocpsoft.tutorial.regex.server;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,38 +43,41 @@ public class RegexParserImpl implements RegexParser
             result.setError(e.getMessage());
          }
 
-         List<CapturingGroup> captures = parseRegex(regex);
+         List<CapturingGroup> captures = ParseTools.extractCaptures(CaptureType.PAREN, regex);
 
-         matcher.reset();
-         if (regex != null && !regex.isEmpty())
+         if (matcher != null)
          {
-            while (matcher.find())
+            matcher.reset();
+            if (regex != null && !regex.isEmpty())
             {
-               Group defaultGroup = new Group(regex, matcher.start(), matcher.end());
-               result.getGroups().add(defaultGroup);
+               while (matcher.find())
+               {
+                  Group defaultGroup = new Group(regex, matcher.start(), matcher.end());
+                  result.getGroups().add(defaultGroup);
+                  for (int i = 0; i < matcher.groupCount(); i++)
+                  {
+                     int start = matcher.start(i + 1);
+                     int end = matcher.end(i + 1);
+                     if ((start != -1 && end != -1) &&
+                              (defaultGroup.getStart() != start || defaultGroup.getEnd() != end))
+                     {
+                        result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
+                     }
+                  }
+               }
+            }
+
+            matcher.reset();
+            if (matcher.matches())
+            {
+               result.getGroups().clear();
                for (int i = 0; i < matcher.groupCount(); i++)
                {
                   int start = matcher.start(i + 1);
                   int end = matcher.end(i + 1);
-                  if ((start != -1 && end != -1) &&
-                           (defaultGroup.getStart() != start || defaultGroup.getEnd() != end))
-                  {
+                  if (start != -1 && end != -1)
                      result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
-                  }
                }
-            }
-         }
-
-         matcher.reset();
-         if (matcher.matches())
-         {
-            result.getGroups().clear();
-            for (int i = 0; i < matcher.groupCount(); i++)
-            {
-               int start = matcher.start(i + 1);
-               int end = matcher.end(i + 1);
-               if (start != -1 && end != -1)
-                  result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
             }
          }
       }
@@ -113,33 +115,6 @@ public class RegexParserImpl implements RegexParser
          result.append(c);
       }
       return result.toString().replaceAll("\\\\\\\\", "\\\\");
-   }
-
-   private List<CapturingGroup> parseRegex(String regex)
-   {
-      List<CapturingGroup> captures = new ArrayList<ParseTools.CapturingGroup>();
-      char[] chars = regex.toCharArray();
-      if (chars.length > 0)
-      {
-         int cursor = 0;
-         while (cursor < chars.length)
-         {
-            switch (chars[cursor])
-            {
-            case '(':
-               CapturingGroup group = ParseTools.balancedCapture(chars, cursor, chars.length - 1, CaptureType.PAREN);
-               captures.add(group);
-
-               break;
-
-            default:
-               break;
-            }
-
-            cursor++;
-         }
-      }
-      return captures;
    }
 
 }

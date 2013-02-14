@@ -26,7 +26,7 @@ public final class Highlighter
    {
       String result = text;
 
-      if (!event.getGroups().isEmpty())
+      if (text != null && !text.isEmpty() && !event.getGroups().isEmpty())
       {
          colorIndex = 0;
          List<Group> groups = new ArrayList<Group>(event.getGroups());

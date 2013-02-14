@@ -131,44 +131,39 @@ public class App extends Composite
 
    }
 
-   public void handleResult(RegexResult event)
-   {
-      if (event.getError() != null && !event.getError().isEmpty())
+   RemoteCallback<RegexResult> callback = new RemoteCallback<RegexResult>() {
+      public void callback(RegexResult event)
       {
-         error.setText(event.getError());
-         error.setVisible(true);
-         result.removeStyleName("matches");
-      }
-      else
-         error.setVisible(false);
-
-      if (event.getText() != null && !event.getText().isEmpty())
-      {
-         result.getElement().setInnerHTML(highlighter.highlight(event.getText(), event));
-         if (event.isMatches())
+         if (event.getError() != null && !event.getError().isEmpty())
          {
-            result.addStyleName("matches");
+            error.setText(event.getError());
+            error.setVisible(true);
+            result.removeStyleName("matches");
          }
          else
-            result.removeStyleName("matches");
-      }
-      else
-         result.setVisible(false);
+            error.setVisible(false);
 
-      if (event.getReplaced() != null && !event.getReplaced().isEmpty())
-      {
-         replaced.setText(event.getReplaced());
-         replaced.setVisible(true);
-      }
-      else
-         replaced.setVisible(false);
+         if (event.getText() != null && !event.getText().isEmpty())
+         {
+            result.getElement().setInnerHTML(highlighter.highlight(event.getText(), event));
+            if (event.isMatches())
+            {
+               result.addStyleName("matches");
+            }
+            else
+               result.removeStyleName("matches");
+            result.setVisible(true);
+         }
+         else
+            result.setVisible(false);
 
-   }
-
-   RemoteCallback<RegexResult> callback = new RemoteCallback<RegexResult>() {
-      public void callback(RegexResult value)
-      {
-         handleResult(value);
+         if (event.getReplaced() != null && !event.getReplaced().isEmpty())
+         {
+            replaced.setText(event.getReplaced());
+            replaced.setVisible(true);
+         }
+         else
+            replaced.setVisible(false);
       }
    };
 
