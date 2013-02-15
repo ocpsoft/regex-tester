@@ -30,8 +30,11 @@ import org.ocpsoft.tutorial.regex.client.shared.RegexParser;
 import org.ocpsoft.tutorial.regex.client.shared.RegexRequest;
 import org.ocpsoft.tutorial.regex.client.shared.RegexResult;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -45,8 +48,6 @@ import com.google.gwt.user.client.ui.TextArea;
 public class App extends Composite
 {
    private static final int DELAY = 200;
-
-   Highlighter highlighter = new Highlighter();
 
    @Inject
    @DataField
@@ -102,7 +103,12 @@ public class App extends Composite
    private RegexRequest request;
 
    @EventHandler({ "text", "regex", "replacement" })
-   void handleUpdate(KeyUpEvent event)
+   void onInputsKeyUp(KeyUpEvent event)
+   {
+      requestUpdate();
+   }
+
+   private void requestUpdate()
    {
       final RegexRequest update = new RegexRequest(
                text.getText(),
@@ -127,8 +133,77 @@ public class App extends Composite
          };
 
          timer.schedule(DELAY);
+         updateToggles();
       }
+   }
 
+   @Inject
+   private @DataField
+   Button ignoreCase;
+   @Inject
+   private @DataField
+   Button dotAll;
+   @Inject
+   private @DataField
+   Button multiLine;
+   @Inject
+   private @DataField
+   Button unixLines;
+   @Inject
+   private @DataField
+   Button commentsMode;
+   @Inject
+   private @DataField
+   Button unicodeCase;
+
+   FlagToggle ignoreCaseHandler;
+   FlagToggle unixLinesHandler;
+   FlagToggle multiLineHandler;
+   FlagToggle dotAllHandler;
+   FlagToggle unicodeCaseHandler;
+   FlagToggle commentsModeHandler;
+
+   public void updateToggles()
+   {
+      ignoreCaseHandler.refresh();
+      unixLinesHandler.refresh();
+      multiLineHandler.refresh();
+      dotAllHandler.refresh();
+      unicodeCaseHandler.refresh();
+      commentsModeHandler.refresh();
+   }
+
+   @PostConstruct
+   public void initFlags()
+   {
+      ignoreCaseHandler = new FlagToggle(ignoreCase, regex, "i");
+      unixLinesHandler = new FlagToggle(unixLines, regex, "d");
+      multiLineHandler = new FlagToggle(multiLine, regex, "m");
+      dotAllHandler = new FlagToggle(dotAll, regex, "s");
+      unicodeCaseHandler = new FlagToggle(unicodeCase, regex, "u");
+      commentsModeHandler = new FlagToggle(commentsMode, regex, "x");
+
+      ignoreCase.addClickHandler(ignoreCaseHandler);
+      ClickHandler toggleClickHandler = new ClickHandler() {
+         
+         @Override
+         public void onClick(ClickEvent event)
+         {
+            requestUpdate();
+         }
+      };
+      
+      ignoreCase.addClickHandler(toggleClickHandler);
+      dotAll.addClickHandler(dotAllHandler);
+      dotAll.addClickHandler(toggleClickHandler);
+      multiLine.addClickHandler(multiLineHandler);
+      multiLine.addClickHandler(toggleClickHandler);
+      unixLines.addClickHandler(unixLinesHandler);
+      unixLines.addClickHandler(toggleClickHandler);
+      unicodeCase.addClickHandler(unicodeCaseHandler);
+      unicodeCase.addClickHandler(toggleClickHandler);
+      commentsMode.addClickHandler(commentsModeHandler);
+      commentsMode.addClickHandler(toggleClickHandler);
    }
 
    RemoteCallback<RegexResult> callback = new RemoteCallback<RegexResult>() {
@@ -145,6 +220,7 @@ public class App extends Composite
 
          if (event.getText() != null && !event.getText().isEmpty())
          {
+            Highlighter highlighter = new Highlighter();
             result.getElement().setInnerHTML(highlighter.highlight(event.getText(), event));
             if (event.isMatches())
             {

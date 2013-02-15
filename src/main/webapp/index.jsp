@@ -17,9 +17,9 @@
 <!-- Le styles -->
 <link href="<%=contextPath%>/bootstrap/css/bootstrap.css"
 	rel="stylesheet">
-<link href="<%=contextPath%>/css/application.css" rel="stylesheet">
 <link href="<%=contextPath%>/bootstrap/css/bootstrap-responsive.css"
 	rel="stylesheet">
+<link href="<%=contextPath%>/css/application.css" rel="stylesheet">
 
 <!-- Google Fonts -->
 <link href='http://fonts.googleapis.com/css?family=Gudea:400,700'

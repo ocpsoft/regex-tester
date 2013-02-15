@@ -36,6 +36,10 @@ input,textarea {
 	min-height: 51px;
 }
 
+.disabled {
+	cursor: pointer !important;
+}
+
 .faded {
 	opacity: .5;
 }
@@ -49,6 +53,7 @@ input,textarea {
 }
 
 .flags button {
+	
 }
 
 .inputs {

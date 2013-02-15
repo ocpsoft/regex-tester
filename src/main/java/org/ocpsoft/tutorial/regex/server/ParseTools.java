@@ -176,7 +176,10 @@ public abstract class ParseTools
          {
             char curr = chars[cursor];
             if (curr == type.getBegin())
-               captures.add(ParseTools.balancedCapture(chars, cursor, chars.length - 1, type));
+            {
+               if (cursor == 0 || chars[cursor - 1] != '\\')
+                  captures.add(ParseTools.balancedCapture(chars, cursor, chars.length - 1, type));
+            }
          }
       }
       return captures;

@@ -15,6 +15,10 @@
  */
 package org.ocpsoft.tutorial.regex.server;
 
+import static org.junit.Assert.*;
+
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.ocpsoft.tutorial.regex.server.ParseTools.CaptureType;
@@ -133,6 +137,13 @@ public class ParseToolsTest
    public void testIsEscapedReturnsFalseWhenCharacterIsDoubleEscaped() throws Exception
    {
       Assert.assertFalse(ParseTools.isEscaped("/foo{bar\\\\}}".toCharArray(), 10));
+   }
+   
+   @Test
+   public void testGetCapturesIgnoresEscapedGroups() throws Exception
+   {
+      List<CapturingGroup> captures = ParseTools.extractCaptures(CaptureType.PAREN, "\\(\\?([idmsux]+)?-?([idmsux]+)");
+      Assert.assertEquals(2, captures.size());
    }
 
 }

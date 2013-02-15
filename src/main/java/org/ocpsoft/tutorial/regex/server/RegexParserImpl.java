@@ -35,9 +35,6 @@ public class RegexParserImpl implements RegexParser
             if (regex != null)
             {
                matcher = Pattern.compile(regex).matcher(request.getText());
-               result.setMatches(matcher.matches());
-               if (replacement != null && !replacement.isEmpty())
-                  result.setReplaced(matcher.replaceAll(replacement));
             }
          }
          catch (Exception e) {
@@ -58,6 +55,7 @@ public class RegexParserImpl implements RegexParser
             matcher.reset();
             if (matcher.matches())
             {
+               result.setMatches(matcher.matches());
                result.getGroups().clear();
                for (int i = 0; i < matcher.groupCount(); i++)
                {
@@ -65,6 +63,12 @@ public class RegexParserImpl implements RegexParser
                   int end = matcher.end(i + 1);
                   if (start != -1 && end != -1)
                      result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
+               }
+
+               StringBuffer replaced = new StringBuffer();
+               if (replacement != null && !replacement.isEmpty()) {
+                  matcher.appendReplacement(replaced, request.getReplacement());
+                  result.setReplaced(replaced.toString());
                }
             }
             else
@@ -85,6 +89,9 @@ public class RegexParserImpl implements RegexParser
                      }
                   }
                }
+
+               if (replacement != null && !replacement.isEmpty())
+                  result.setReplaced(matcher.replaceAll(replacement));
             }
          }
       }
