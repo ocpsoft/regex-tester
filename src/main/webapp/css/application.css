@@ -48,6 +48,9 @@ input,textarea {
 	background-color: #FFB3B3;
 }
 
+.flags button {
+}
+
 .inputs {
 	margin-bottom: 25px;
 }

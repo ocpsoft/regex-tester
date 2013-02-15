@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%
-	String contextPath = getServletContext().getContextPath();
+   String contextPath = getServletContext().getContextPath();
 %>
 <html lang="en">
 <head>
@@ -52,6 +52,7 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="<%=contextPath%>/js/jquery.min.js"></script>
 	<script src="<%=contextPath%>/js/jquery-expandable.js"></script>
+	<script src="<%=contextPath%>/bootstrap/js/bootstrap.min.js"></script>
 
 </body>
 </html>
