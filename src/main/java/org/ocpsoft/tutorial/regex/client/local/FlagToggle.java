@@ -41,7 +41,7 @@ public class FlagToggle implements ClickHandler
          while ((result = flagsPattern.exec(value)) != null)
          {
             String on = result.getGroup(1);
-            String off = result.getGroup(2);
+            String off = result.getGroup(3);
 
             if (off != null && off.contains(flag))
                this.enabled = false;

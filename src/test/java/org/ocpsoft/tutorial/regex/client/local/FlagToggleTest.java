@@ -22,17 +22,17 @@ public class FlagToggleTest
    }
 
    @Test
-   public void testUpdateRemoveSinglePrefix() throws Exception
+   public void testUpdateRemoveSinglePrefixNoop() throws Exception
    {
       FlagToggle toggle = new FlagToggle();
-      Assert.assertEquals("asdf", toggle.updateFlag("asdf(?i)", "i", false));
+      Assert.assertEquals("asdf(?i)", toggle.updateFlag("asdf(?i)", "i", false));
    }
 
    @Test
-   public void testUpdateRemoveSingleMiddle() throws Exception
+   public void testUpdateRemoveSingleMiddleNoop() throws Exception
    {
       FlagToggle toggle = new FlagToggle();
-      Assert.assertEquals("asdf1234", toggle.updateFlag("asdf(?i)1234", "i", false));
+      Assert.assertEquals("asdf(?i)1234", toggle.updateFlag("asdf(?i)1234", "i", false));
    }
 
    @Test
@@ -50,17 +50,17 @@ public class FlagToggleTest
    }
 
    @Test
-   public void testUpdateRemoveFromManyPrefix() throws Exception
+   public void testUpdateRemoveFromManyPrefixNoop() throws Exception
    {
       FlagToggle toggle = new FlagToggle();
-      Assert.assertEquals("asdf(?d)", toggle.updateFlag("asdf(?id)", "i", false));
+      Assert.assertEquals("asdf(?id)", toggle.updateFlag("asdf(?id)", "i", false));
    }
 
    @Test
-   public void testUpdateRemoveFromManyWithPatternMiddle() throws Exception
+   public void testUpdateRemoveFromManyWithPatternMiddleNoop() throws Exception
    {
       FlagToggle toggle = new FlagToggle();
-      Assert.assertEquals("qwer(?d)asdf", toggle.updateFlag("qwer(?id)asdf", "i", false));
+      Assert.assertEquals("qwer(?id)asdf", toggle.updateFlag("qwer(?id)asdf", "i", false));
    }
 
    @Test
@@ -109,21 +109,21 @@ public class FlagToggleTest
    public void testUpdateAddEndFromManyWithPattern() throws Exception
    {
       FlagToggle toggle = new FlagToggle();
-      Assert.assertEquals("asdf(?id)", toggle.updateFlag("asdf(?d)", "i", true));
+      Assert.assertEquals("(?i)asdf(?d)", toggle.updateFlag("asdf(?d)", "i", true));
    }
 
    @Test
    public void testUpdateAddMiddleRemoveFromManyPrefix() throws Exception
    {
       FlagToggle toggle = new FlagToggle();
-      Assert.assertEquals("asdf(?id)1234", toggle.updateFlag("asdf(?d)1234", "i", true));
+      Assert.assertEquals("(?i)asdf(?d)1234", toggle.updateFlag("asdf(?d)1234", "i", true));
    }
 
    @Test
-   public void testUpdateAddExistingFromManyWithPatternMiddleUnchanged() throws Exception
+   public void testUpdateAddExistingFromManyWithPatternMiddle() throws Exception
    {
       FlagToggle toggle = new FlagToggle();
-      Assert.assertEquals("qwer(?d)asdf(?id)", toggle.updateFlag("qwer(?d)asdf(?id)", "i", true));
+      Assert.assertEquals("(?i)qwer(?d)asdf(?id)", toggle.updateFlag("qwer(?d)asdf(?id)", "i", true));
    }
 
    @Test
@@ -151,6 +151,6 @@ public class FlagToggleTest
    public void testUpdateAddIgnoresCapturingGroupLocalConfigSuffix() throws Exception
    {
       FlagToggle toggle = new FlagToggle();
-      Assert.assertEquals("xxbs(?d:x)(?di)", toggle.updateFlag("xxbs(?d:x)(?i)", "d", true));
+      Assert.assertEquals("(?d)xxbs(?d:x)(?i)", toggle.updateFlag("xxbs(?d:x)(?i)", "d", true));
    }
 }
