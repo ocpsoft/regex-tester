@@ -33,31 +33,39 @@ public class FlagToggle implements ClickHandler
    public void refresh()
    {
       String value = text.getText();
-      if (value != null && RegExp.compile(FLAGS_PATTERN).test(value))
-      {
-         MatchResult result;
-         RegExp flagsPattern = RegExp.compile(FLAGS_PATTERN, "g");
-         
-         while ((result = flagsPattern.exec(value)) != null)
-         {
-            String on = result.getGroup(1);
-            String off = result.getGroup(3);
-
-            if (off != null && off.contains(flag))
-               this.enabled = false;
-            else if (on != null && on.contains(flag))
-               this.enabled = true;
-            else
-               this.enabled = false;
-         }
-      }
-      else
-         enabled = false;
+      enabled = calculateEnabled(value, flag);
 
       if (enabled)
          target.addStyleName(DISABLED_STYLE);
       else
          target.removeStyleName(DISABLED_STYLE);
+   }
+
+   public boolean calculateEnabled(String value, String flag)
+   {
+      boolean result = false;
+      if (value != null && RegExp.compile(FLAGS_PATTERN).test(value))
+      {
+         MatchResult match;
+         RegExp flagsPattern = RegExp.compile(FLAGS_PATTERN);
+
+         if ((match = flagsPattern.exec(value)) != null)
+         {
+            String on = match.getGroup(1);
+            String off = match.getGroup(3);
+
+            if (off != null && off.contains(flag))
+               result = false;
+            else if (on != null && on.contains(flag))
+               result = true;
+            else
+               result = false;
+         }
+      }
+      else
+         result = false;
+
+      return result;
    }
 
    @Override
@@ -76,37 +84,47 @@ public class FlagToggle implements ClickHandler
    {
       if (RegExp.compile(FLAGS_PATTERN).test(value))
       {
-         if (enabled && RegExp.compile("\\(\\?([idmsux]*" + flag + "[idmsux]*)(-)?([idmsux]+)?\\)").test(value))
+         if (enabled && RegExp.compile("^\\(\\?([idmsux]*" + flag + "[idmsux]*)(-)?([idmsux]+)?\\)").test(value))
          {
-            // all good
+            value = RegExp.compile(
+                     "^\\(\\?([idmsux]*?)(" + flag + ")([idmsux]*)(-?)([idmsux]*?)" + flag + "?([idmsux]*)\\)")
+                     .replace(value, "(?$1$2$3$4$5$6)");
          }
-         else if (enabled && RegExp.compile("\\(\\?([idmsux]*)(-)?([idmsux]*)\\)").test(value))
+         else if (enabled && RegExp.compile("^\\(\\?([idmsux]*)(-)?([idmsux]*)\\)").test(value))
          {
-            value = RegExp.compile("\\(\\?([idmsux]*)(-)?([idmsux]+)?\\)").replace(value, "(?" + flag + "$1$2$3)");
+            value = RegExp.compile("^\\(\\?([idmsux]*)(-)?([idmsux]+)?\\)").replace(value, "(?" + flag + "$1$2$3)");
          }
          else if (enabled
-                  && RegExp.compile("\\(\\?([idmsux]*)(-)?(([idmsux]*)(" + flag + ")([idmsux]*))?\\)").test(value))
+                  && RegExp.compile("^\\(\\?([idmsux]*)(-)?(([idmsux]*)(" + flag + ")([idmsux]*))?\\)").test(value))
          {
             value = RegExp.compile(
-                     "\\(\\?([idmsux]*)(-)?(([idmsux]*)(" + flag + ")([idmsux]*))?\\)", "g").replace(value,
+                     "^\\(\\?([idmsux]*)(-)?(([idmsux]*)(" + flag + ")([idmsux]*))?\\)").replace(value,
                      "(?$1$2$4$6)");
             value = RegExp.compile(
-                     "\\(\\?(([idmsux]*)" + flag + "?([idmsux]*)(-)?)([idmsux]*)\\)").replace(value,
+                     "^\\(\\?(([idmsux]*)" + flag + "?([idmsux]*)(-)?)([idmsux]*)\\)").replace(value,
                      "(?" + flag + "$2$3$4)");
          }
-         else if (!enabled && RegExp.compile("\\(\\?([idmsux]?)(-)([idmsux]*" + flag + "[idmsux]*)?\\)").test(value))
+         else if (!enabled && RegExp.compile("^\\(\\?([idmsux]?)(-)([idmsux]*" + flag + "[idmsux]*)?\\)").test(value))
          {
-            // all good
+            value = RegExp.compile(
+                     "^\\(\\?([idmsux]*?)" + flag + "([idmsux]*)(-?)([idmsux]*?)" + flag + "?([idmsux]*)\\)").replace(
+                     value, "(?$1$2$3$4$5)");
          }
-         else if (!enabled && RegExp.compile("\\(\\?([idmsux]*" + flag + "[idmsux]*)(-)?([idmsux]+)?\\)").test(value))
+         else if (!enabled && RegExp.compile("^\\(\\?([idmsux]*" + flag + "[idmsux]*)(-)?([idmsux]+)?\\)").test(value))
          {
-            value = RegExp.compile("\\(\\?([idmsux]*?)" + flag + "([idmsux]*)(-?)([idmsux]*)\\)", "g").replace(value,
-                     "(?$1$2$3)");
+            value = RegExp.compile(
+                     "^\\(\\?([idmsux]*?)" + flag + "([idmsux]*)(-?)([idmsux]*?)" + flag + "?([idmsux]*)\\)").replace(
+                     value, "(?$1$2$3$4$5)");
          }
 
-         if (!enabled && RegExp.compile("\\(\\?-?\\)").test(value))
+         if (RegExp.compile("^\\(\\?([idmsux]*)-\\)").test(value))
          {
-            value = RegExp.compile("\\(\\?-?\\)", "g").replace(value, "");
+            value = RegExp.compile("^\\(\\?([idmsux]*)-\\)").replace(value, "(?$1)");
+         }
+
+         if (!enabled && RegExp.compile("^\\(\\?-?\\)").test(value))
+         {
+            value = RegExp.compile("^\\(\\?-?\\)").replace(value, "");
          }
       }
 

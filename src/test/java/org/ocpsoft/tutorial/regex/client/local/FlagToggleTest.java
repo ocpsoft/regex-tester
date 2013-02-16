@@ -6,12 +6,61 @@ import org.junit.Test;
 
 public class FlagToggleTest
 {
+   
+   @Test
+   public void testCalculateEnabled() throws Exception
+   {
+      FlagToggle toggle = new FlagToggle();
+      Assert.assertEquals(true, toggle.calculateEnabled("(?i)", "i"));
+      Assert.assertEquals(true, toggle.calculateEnabled("(?di)", "i"));
+      Assert.assertEquals(true, toggle.calculateEnabled("(?dim)", "i"));
+      Assert.assertEquals(false, toggle.calculateEnabled("(?i-i)", "i"));
+      Assert.assertEquals(true, toggle.calculateEnabled("(?id-i)", "d"));
+   }
+
+
+   @Test
+   public void testUpdateEnableNegated() throws Exception
+   {
+      FlagToggle toggle = new FlagToggle();
+      Assert.assertEquals("(?i)", toggle.updateFlag("(?i-i)", "i", true));
+   }
+
+
+   @Test
+   public void testUpdateEnableNegatedMulti() throws Exception
+   {
+      FlagToggle toggle = new FlagToggle();
+      Assert.assertEquals("(?i-d)", toggle.updateFlag("(?i-id)", "i", true));
+   }
 
    @Test
    public void testUpdateRemoveSingle() throws Exception
    {
       FlagToggle toggle = new FlagToggle();
       Assert.assertEquals("", toggle.updateFlag("(?i)", "i", false));
+   }
+
+
+   @Test
+   public void testUpdateRemoveNegated() throws Exception
+   {
+      FlagToggle toggle = new FlagToggle();
+      Assert.assertEquals("", toggle.updateFlag("(?i-i)", "i", false));
+   }
+
+   @Test
+   public void testUpdateRemoveNegatedMulti() throws Exception
+   {
+      FlagToggle toggle = new FlagToggle();
+      Assert.assertEquals("(?d)", toggle.updateFlag("(?id-i)", "i", false));
+   }
+
+   @Test
+   public void testUpdateRemoveMultiNegated() throws Exception
+   {
+      FlagToggle toggle = new FlagToggle();
+      Assert.assertEquals("(?-d)", toggle.updateFlag("(?i-id)", "i", false));
    }
 
    @Test
@@ -67,14 +116,14 @@ public class FlagToggleTest
    public void testUpdateRemoveFromManyPrefixMultiple() throws Exception
    {
       FlagToggle toggle = new FlagToggle();
-      Assert.assertEquals("asdf(?d)", toggle.updateFlag("(?i)asdf(?id)", "i", false));
+      Assert.assertEquals("asdf(?id)", toggle.updateFlag("(?i)asdf(?id)", "i", false));
    }
 
    @Test
    public void testUpdateRemoveFromManyWithPatternMiddleMultiple() throws Exception
    {
       FlagToggle toggle = new FlagToggle();
-      Assert.assertEquals("(?d)qwer(?d)asdf", toggle.updateFlag("(?id)qwer(?id)asdf", "i", false));
+      Assert.assertEquals("(?d)qwer(?id)asdf", toggle.updateFlag("(?id)qwer(?id)asdf", "i", false));
    }
 
    @Test
@@ -82,6 +131,20 @@ public class FlagToggleTest
    {
       FlagToggle toggle = new FlagToggle();
       Assert.assertEquals("(?i)", toggle.updateFlag("", "i", true));
+   }
+
+   @Test
+   public void testUpdateAddSingleWithPrefixSpace() throws Exception
+   {
+      FlagToggle toggle = new FlagToggle();
+      Assert.assertEquals("(?i) (?i)", toggle.updateFlag(" (?i)", "i", true));
+   }
+
+   @Test
+   public void testUpdateRemoveSingleWithPrefixSpace() throws Exception
+   {
+      FlagToggle toggle = new FlagToggle();
+      Assert.assertEquals(" (?i)", toggle.updateFlag(" (?i)", "i", false));
    }
 
    @Test
