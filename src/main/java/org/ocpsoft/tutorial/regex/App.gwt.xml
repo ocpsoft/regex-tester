@@ -17,5 +17,6 @@
       /> -->
 
    <set-property name="compiler.useSourceMaps" value="true"></set-property>
+   <add-linker name="xsiframe" />
 
 </module>
