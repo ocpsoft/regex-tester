@@ -79,3 +79,14 @@ input,textarea {
 .group {
 	display: inline;
 }
+
+
+.mobile {
+	display: none;
+}
+
+@media (max-width: 480px) {
+	.mobile {
+		display: block;
+	}
+}
