@@ -15,11 +15,11 @@
     <![endif]-->
 
 <!-- Le styles -->
-<link href="<%=contextPath%>/bootstrap/css/bootstrap.css"
+<link href="bootstrap/css/bootstrap.css"
 	rel="stylesheet">
-<link href="<%=contextPath%>/bootstrap/css/bootstrap-responsive.css"
+<link href="bootstrap/css/bootstrap-responsive.css"
 	rel="stylesheet">
-<link href="<%=contextPath%>/css/application.css" rel="stylesheet">
+<link href="css/application.css" rel="stylesheet">
 
 <!-- Google Fonts -->
 <link href='http://fonts.googleapis.com/css?family=Gudea:400,700'
@@ -28,16 +28,16 @@
 	rel='stylesheet' type='text/css'>
 
 <!-- Le fav and touch icons -->
-<link rel="shortcut icon" href="<%=contextPath%>/favicon.ico">
-<link rel="apple-touch-icon" href="<%=contextPath%>/favicon.ico">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="favicon.ico">
 
 <link rel="apple-touch-icon" sizes="72x72"
-	href="<%=contextPath%>/images/apple-touch-icon-72x72.png">
+	href="images/apple-touch-icon-72x72.png">
 <link rel="apple-touch-icon" sizes="114x114"
-	href="<%=contextPath%>/images/apple-touch-icon-114x114.png">
+	href="images/apple-touch-icon-114x114.png">
 
 <script type="text/javascript" language="javascript"
-	src="<%=contextPath%>/app/app.nocache.js"></script>
+	src="app/app.nocache.js"></script>
 </head>
 
 <body>
@@ -50,9 +50,9 @@
 	<!-- Le javascript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="<%=contextPath%>/js/jquery.min.js"></script>
-	<script src="<%=contextPath%>/js/jquery-expandable.js"></script>
-	<script src="<%=contextPath%>/bootstrap/js/bootstrap.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-expandable.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
 
 </body>
 </html>

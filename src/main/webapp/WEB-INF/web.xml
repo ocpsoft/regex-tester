@@ -10,8 +10,8 @@
          <param-name>service-locator</param-name>
          <param-value>org.jboss.errai.cdi.server.CDIServiceLocator</param-value>
       </init-param>
-      <async-supported>true</async-supported>
       <load-on-startup>1</load-on-startup>
+      <async-supported>true</async-supported>
    </servlet>
 
    <servlet-mapping>
