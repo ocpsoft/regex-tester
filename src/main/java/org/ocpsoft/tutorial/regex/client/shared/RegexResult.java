@@ -49,11 +49,6 @@ public class RegexResult
       this.matches = matches;
    }
 
-   public void setPatternGroups(List<Group> groups)
-   {
-      this.groups = groups;
-   }
-
    public void setReplaced(String text)
    {
       this.replaced = text;

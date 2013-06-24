@@ -7,9 +7,6 @@ import java.util.List;
 
 public final class Highlighter
 {
-   private static final String COLOR_BEGIN = "<span style=\"color: #XXXXXX\" class=\"highlight\">";
-   private static final String COLOR_END = "</span>";
-
    int colorIndex = 0;
    private List<String> colors = Arrays.asList(
             "8b008b",
@@ -22,54 +19,64 @@ public final class Highlighter
             "daa520"
             );
 
-   public String highlight(String text, RegexResult event)
+   public HighlightedGroup highlight(String text, RegexResult event)
    {
-      String result = text;
+      HighlightedGroup result = new HighlightedGroup(text, 0, text.length());
 
       if (text != null && !text.isEmpty() && !event.getGroups().isEmpty())
       {
          colorIndex = 0;
          List<Group> groups = new ArrayList<Group>(event.getGroups());
-         
+
          Collections.sort(groups);
+         Collections.reverse(groups);
 
-         List<Group> seen = new ArrayList<Group>();
-
-         for (Group group : groups) {
-            int start = group.getStart();
-            int end = group.getEnd();
-
-            int level = level(seen, group);
-            if (level > 0)
-               end = end + (level * (selectColor().length() + COLOR_END.length()));
-
-            String prefix = result.substring(0, start);
-            String content = result.substring(start, end);
-            String suffix = result.substring(end);
-            result = prefix + selectColor() + content + COLOR_END + suffix;
-
-            seen.add(group);
-         }
+         highlightGroup(groups, result);
       }
 
       return result;
+   }
+
+   private void highlightGroup(List<Group> groups, HighlightedGroup parent)
+   {
+      while (!groups.isEmpty()) {
+         Group group = groups.get(0);
+         if (group.getStart() >= parent.getStart() && group.getEnd() <= parent.getEnd())
+         {
+            groups.remove(0);
+            String text = parent.getText();
+            int start = group.getStart() - parent.getStart();
+            int end = group.getEnd() - parent.getStart();
+
+            HighlightedGroup prefix = new HighlightedGroup(text.substring(0, start), 0, start);
+            HighlightedGroup content = new HighlightedGroup(text.substring(start, end), group);
+            HighlightedGroup suffix = new HighlightedGroup(text.substring(end), group.getEnd(), parent.getEnd());
+
+            if (!prefix.getText().isEmpty())
+               parent.add(prefix);
+
+            if (!content.getText().isEmpty())
+            {
+               parent.add(content);
+               highlightGroup(groups, content);
+            }
+
+            if (!suffix.getText().isEmpty())
+            {
+               parent.add(suffix);
+               highlightGroup(groups, suffix);
+            }
+         }
+         else
+            break;
+      }
    }
 
    private String selectColor()
    {
       if (colorIndex == colors.size())
          colorIndex = 0;
-      return COLOR_BEGIN.replaceFirst("XXXXXX", colors.get(colorIndex++));
-   }
-
-   private int level(List<Group> seen, Group group)
-   {
-      int result = 0;
-      for (Group s : seen) {
-         if (group.getStart() <= s.getStart() && s.getEnd() <= group.getEnd() && group != s)
-            result++;
-      }
-      return result;
+      return colors.get(colorIndex++);
    }
 
 }

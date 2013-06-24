@@ -302,7 +302,7 @@ public class Tester extends Composite
          if (event.getText() != null && !event.getText().isEmpty())
          {
             Highlighter highlighter = new Highlighter();
-            result.getElement().setInnerHTML(highlighter.highlight(event.getText(), event));
+            result.getElement().setInnerHTML(highlighter.highlight(event.getText(), event).toString());
             if (event.isMatches())
             {
                result.addStyleName("matches");
