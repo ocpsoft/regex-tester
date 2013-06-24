@@ -60,8 +60,8 @@
 	</repositories>
 
 	<build>
-		<finalName>${project.artifactId}-${project.version}</finalName>
-
+		<finalName>${project.artifactId}</finalName>
+		<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
 		<pluginManagement>
 			<plugins>
 				<plugin>

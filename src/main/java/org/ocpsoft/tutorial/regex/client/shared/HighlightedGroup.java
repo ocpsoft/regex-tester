@@ -55,6 +55,11 @@ public class HighlightedGroup
       return text;
    }
 
+   public boolean isLeaf()
+   {
+      return getChildren() == null || getChildren().isEmpty();
+   }
+
    @Override
    public String toString()
    {
@@ -68,5 +73,10 @@ public class HighlightedGroup
          }
          return result;
       }
+   }
+
+   public boolean isMatchingGroup()
+   {
+      return group != null;
    }
 }

@@ -1,23 +1,11 @@
 package org.ocpsoft.tutorial.regex.client.shared;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public final class Highlighter
 {
-   int colorIndex = 0;
-   private List<String> colors = Arrays.asList(
-            "8b008b",
-            "ff8c00",
-            "0099ff",
-            "ff1493",
-            "b22222",
-            "1e90ff",
-            "ff4500",
-            "daa520"
-            );
 
    public HighlightedGroup highlight(String text, RegexResult event)
    {
@@ -25,7 +13,6 @@ public final class Highlighter
 
       if (text != null && !text.isEmpty() && !event.getGroups().isEmpty())
       {
-         colorIndex = 0;
          List<Group> groups = new ArrayList<Group>(event.getGroups());
 
          Collections.sort(groups);
@@ -70,13 +57,6 @@ public final class Highlighter
          else
             break;
       }
-   }
-
-   private String selectColor()
-   {
-      if (colorIndex == colors.size())
-         colorIndex = 0;
-      return colors.get(colorIndex++);
    }
 
 }

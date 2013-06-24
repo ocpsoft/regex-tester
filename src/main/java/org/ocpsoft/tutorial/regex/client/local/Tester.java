@@ -47,6 +47,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 
@@ -141,9 +142,8 @@ public class Tester extends Composite
    @DataField
    private TextArea replacement;
 
-   @Inject
    @DataField
-   private Label result;
+   private HTMLPanel result = new HTMLPanel("div", "");
 
    @Inject
    @DataField
@@ -302,7 +302,8 @@ public class Tester extends Composite
          if (event.getText() != null && !event.getText().isEmpty())
          {
             Highlighter highlighter = new Highlighter();
-            result.getElement().setInnerHTML(highlighter.highlight(event.getText(), event).toString());
+            result.clear();
+            result.add(new HighlightedResult(highlighter.highlight(event.getText(), event)));
             if (event.isMatches())
             {
                result.addStyleName("matches");
