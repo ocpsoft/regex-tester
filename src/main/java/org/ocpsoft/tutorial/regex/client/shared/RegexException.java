@@ -1,4 +1,4 @@
-package org.ocpsoft.tutorial.regex.server;
+package org.ocpsoft.tutorial.regex.client.shared;
 
 public class RegexException extends RuntimeException
 {

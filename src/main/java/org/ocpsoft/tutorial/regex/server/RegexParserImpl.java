@@ -8,12 +8,14 @@ import javax.enterprise.context.RequestScoped;
 
 import org.jboss.errai.bus.server.annotations.Service;
 import org.ocpsoft.tutorial.regex.client.shared.Group;
+import org.ocpsoft.tutorial.regex.client.shared.ParseTools;
+import org.ocpsoft.tutorial.regex.client.shared.RegexException;
 import org.ocpsoft.tutorial.regex.client.shared.RegexParser;
 import org.ocpsoft.tutorial.regex.client.shared.RegexRequest;
 import org.ocpsoft.tutorial.regex.client.shared.RegexResult;
-import org.ocpsoft.tutorial.regex.server.ParseTools.CaptureFilter;
-import org.ocpsoft.tutorial.regex.server.ParseTools.CaptureType;
-import org.ocpsoft.tutorial.regex.server.ParseTools.CapturingGroup;
+import org.ocpsoft.tutorial.regex.client.shared.ParseTools.CaptureFilter;
+import org.ocpsoft.tutorial.regex.client.shared.ParseTools.CaptureType;
+import org.ocpsoft.tutorial.regex.client.shared.ParseTools.CapturingGroup;
 
 @Service
 @RequestScoped
@@ -41,7 +43,7 @@ public class RegexParserImpl implements RegexParser
             result.setError(e.getMessage());
          }
 
-         List<CapturingGroup> captures = ParseTools.extractCaptures(CaptureType.PAREN, regex, new CaptureFilter() {
+         List<CapturingGroup> fragments = ParseTools.extractCaptures(CaptureType.PAREN, regex, new CaptureFilter() {
             @Override
             public boolean accept(CapturingGroup group)
             {
@@ -62,7 +64,7 @@ public class RegexParserImpl implements RegexParser
                   int start = matcher.start(i + 1);
                   int end = matcher.end(i + 1);
                   if (start != -1 && end != -1)
-                     result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
+                     result.getGroups().add(new Group(fragments.get(i), start, end));
                }
 
                StringBuffer replaced = new StringBuffer();
@@ -76,7 +78,10 @@ public class RegexParserImpl implements RegexParser
                matcher.reset();
                while (matcher.find())
                {
-                  Group defaultGroup = new Group(regex, matcher.start(), matcher.end());
+                  Group defaultGroup = new Group(
+                           new CapturingGroup(("(" + regex + ")").toCharArray(), 0, regex.length() + 1),
+                           matcher.start(),
+                           matcher.end());
                   result.getGroups().add(defaultGroup);
                   for (int i = 0; i < matcher.groupCount(); i++)
                   {
@@ -85,7 +90,7 @@ public class RegexParserImpl implements RegexParser
                      if ((start != -1 && end != -1) &&
                               (defaultGroup.getStart() != start || defaultGroup.getEnd() != end))
                      {
-                        result.getGroups().add(new Group(new String(captures.get(i).getCaptured()), start, end));
+                        result.getGroups().add(new Group(fragments.get(i), start, end));
                      }
                   }
                }

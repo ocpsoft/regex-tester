@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ocpsoft.tutorial.regex.server;
+package org.ocpsoft.tutorial.regex.client.shared;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import org.jboss.errai.common.client.api.annotations.Portable;
+import org.jboss.errai.marshalling.client.api.annotations.MapsTo;
 
 /**
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
@@ -102,13 +104,17 @@ public abstract class ParseTools
       return false;
    }
 
+   @Portable
    public static class CapturingGroup
    {
       private final char[] chars;
       private final int start;
       private final int end;
 
-      public CapturingGroup(final char[] chars, final int start, final int end)
+      public CapturingGroup(
+               @MapsTo("chars") final char[] chars,
+               @MapsTo("start") final int start,
+               @MapsTo("end") final int end)
       {
          this.chars = chars;
          this.start = start;
@@ -127,7 +133,11 @@ public abstract class ParseTools
 
       public char[] getCaptured()
       {
-         return Arrays.copyOfRange(chars, start + 1, end);
+         char[] result = new char[end - (start + 1)];
+         for (int i = 0; i < end - (start + 1); i++) {
+            result[i] = chars[start + 1 + i];
+         }
+         return result;
       }
 
       @Override

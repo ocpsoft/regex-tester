@@ -304,12 +304,8 @@ public class Tester extends Composite
          {
             Highlighter highlighter = new Highlighter();
             result.clear();
-            System.out.println("EVENT TEXT: " + event.getText());
-            System.out.println("EVENT GROUPS: " + event.getGroups());
-
             HighlightedGroup highlightedGroups = highlighter.highlight(event.getText(), event);
-            System.out.println("RESULT: " + highlightedGroups);
-            result.add(new HighlightedResult(highlightedGroups));
+            result.add(new HighlightedResult(new ResultMouseOverHandler(regex), highlightedGroups));
             if (event.isMatches())
             {
                result.addStyleName("matches");

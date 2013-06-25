@@ -3,6 +3,7 @@ package org.ocpsoft.tutorial.regex.server;
 import org.junit.Assert;
 import org.junit.Test;
 import org.ocpsoft.tutorial.regex.client.shared.Group;
+import org.ocpsoft.tutorial.regex.client.shared.RegexException;
 import org.ocpsoft.tutorial.regex.client.shared.RegexRequest;
 import org.ocpsoft.tutorial.regex.client.shared.RegexResult;
 
@@ -62,13 +63,13 @@ public class RegexParserImplTest
       Assert.assertEquals("xxxxxxxxx", result.getReplaced());
 
       Group group = result.getGroups().get(0);
-      Assert.assertEquals("\\w+ ?", group.getFragment());
+      Assert.assertEquals("\\w+ ?", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals(0, group.getStart());
       Assert.assertEquals(4, group.getEnd());
       Assert.assertEquals("the ", text.substring(group.getStart(), group.getEnd()));
 
       group = result.getGroups().get(4);
-      Assert.assertEquals("\\w+ ?", group.getFragment());
+      Assert.assertEquals("\\w+ ?", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals(20, group.getStart());
       Assert.assertEquals(27, group.getEnd());
       Assert.assertEquals("jumped ", text.substring(group.getStart(), group.getEnd()));
@@ -89,11 +90,11 @@ public class RegexParserImplTest
       Group group = result.getGroups().get(0);
       Assert.assertEquals(0, group.getStart());
       Assert.assertEquals(1, group.getEnd());
-      Assert.assertEquals("1", group.getFragment());
+      Assert.assertEquals("1", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals("1", text.substring(group.getStart(), group.getEnd()));
 
       group = result.getGroups().get(1);
-      Assert.assertEquals("12", group.getFragment());
+      Assert.assertEquals("12", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals(0, group.getStart());
       Assert.assertEquals(2, group.getEnd());
       Assert.assertEquals("12", text.substring(group.getStart(), group.getEnd()));
@@ -110,12 +111,12 @@ public class RegexParserImplTest
       Assert.assertEquals("the quick quick brown fox fox", result.getReplaced());
 
       Group group = result.getGroups().get(0);
-      Assert.assertEquals("(\\w+ (\\w+))", group.getFragment());
+      Assert.assertEquals("(\\w+ (\\w+))", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals(0, group.getStart());
       Assert.assertEquals(9, group.getEnd());
 
       group = result.getGroups().get(1);
-      Assert.assertEquals("\\w+", group.getFragment());
+      Assert.assertEquals("\\w+", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals(4, group.getStart());
       Assert.assertEquals(9, group.getEnd());
 
@@ -132,17 +133,17 @@ public class RegexParserImplTest
       Assert.assertEquals("the quick quick brown fox fox ", result.getReplaced());
 
       Group group = result.getGroups().get(0);
-      Assert.assertEquals("(\\w+ (\\w+)) ", group.getFragment());
+      Assert.assertEquals("(\\w+ (\\w+)) ", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals(0, group.getStart());
       Assert.assertEquals(10, group.getEnd());
 
       group = result.getGroups().get(1);
-      Assert.assertEquals("\\w+ (\\w+)", group.getFragment());
+      Assert.assertEquals("\\w+ (\\w+)", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals(0, group.getStart());
       Assert.assertEquals(9, group.getEnd());
 
       group = result.getGroups().get(2);
-      Assert.assertEquals("\\w+", group.getFragment());
+      Assert.assertEquals("\\w+", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals(4, group.getStart());
       Assert.assertEquals(9, group.getEnd());
 
@@ -160,17 +161,17 @@ public class RegexParserImplTest
       Assert.assertEquals("quick brown fox jumped over the lazy dog", result.getReplaced());
 
       Group group = result.getGroups().get(0);
-      Assert.assertEquals("\\w+ \\w+ \\w+ \\w+ (\\w+ \\w+ \\w+)", group.getFragment());
+      Assert.assertEquals("\\w+ \\w+ \\w+ \\w+ (\\w+ \\w+ \\w+)", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals(4, group.getStart());
       Assert.assertEquals(text.length() - 4, group.getEnd());
 
       group = result.getGroups().get(1);
-      Assert.assertEquals("\\w+ \\w+ \\w+", group.getFragment());
+      Assert.assertEquals("\\w+ \\w+ \\w+", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals(27, group.getStart());
       Assert.assertEquals(text.length() - 4, group.getEnd());
 
       group = result.getGroups().get(2);
-      Assert.assertEquals("\\w+", group.getFragment());
+      Assert.assertEquals("\\w+", String.valueOf(group.getRegexFragment().getCaptured()));
       Assert.assertEquals(text.length() - 3, group.getStart());
       Assert.assertEquals(text.length(), group.getEnd());
 

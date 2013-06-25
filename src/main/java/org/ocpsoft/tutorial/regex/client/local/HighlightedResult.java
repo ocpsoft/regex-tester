@@ -2,6 +2,11 @@ package org.ocpsoft.tutorial.regex.client.local;
 
 import org.ocpsoft.tutorial.regex.client.shared.HighlightedGroup;
 
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTMLPanel;
 
@@ -9,13 +14,14 @@ public class HighlightedResult extends HTMLPanel
 {
    private HighlightedGroup group;
    private ColorCycle colorCycle;
+   private MouseOverEvent mouseOver;
 
-   public HighlightedResult(HighlightedGroup group)
+   public HighlightedResult(ResultMouseOverHandler handler, HighlightedGroup group)
    {
-      this(group, null);
+      this(handler, group, null);
    }
 
-   private HighlightedResult(HighlightedGroup group, ColorCycle colorCycle)
+   private HighlightedResult(ResultMouseOverHandler handler, HighlightedGroup group, ColorCycle colorCycle)
    {
       super("span", "");
 
@@ -27,7 +33,7 @@ public class HighlightedResult extends HTMLPanel
 
       this.group = group;
       for (HighlightedGroup child : group.getChildren()) {
-         this.add(new HighlightedResult(child, colorCycle));
+         this.add(new HighlightedResult(handler, child, colorCycle));
       }
 
       if (this.group.isLeaf())
@@ -38,6 +44,9 @@ public class HighlightedResult extends HTMLPanel
       if (this.group.isMatchingGroup()) {
          this.addStyleName("highlight");
       }
+
+      addMouseOutHandler(handler);
+      addMouseOverHandler(handler);
    }
 
    @Override
@@ -49,5 +58,30 @@ public class HighlightedResult extends HTMLPanel
       {
          this.getElement().setAttribute("style", "color: #" + colorCycle.getColor() + ";");
       }
+   }
+
+   public HighlightedGroup getHighlightedGroup()
+   {
+      return group;
+   }
+
+   public HandlerRegistration addMouseOverHandler(MouseOverHandler handler)
+   {
+      return addDomHandler(handler, MouseOverEvent.getType());
+   }
+
+   public HandlerRegistration addMouseOutHandler(MouseOutHandler handler)
+   {
+      return addDomHandler(handler, MouseOutEvent.getType());
+   }
+
+   public void setMouseOverEvent(MouseOverEvent event)
+   {
+      this.mouseOver = event;
+   }
+
+   public MouseOverEvent getMouseOverEvent()
+   {
+      return mouseOver;
    }
 }

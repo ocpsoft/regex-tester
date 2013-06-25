@@ -1,7 +1,6 @@
 package org.ocpsoft.tutorial.regex.client.shared;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.ocpsoft.tutorial.regex.server.RegexParserImpl;
 

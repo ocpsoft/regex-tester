@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ocpsoft.tutorial.regex.server;
+package org.ocpsoft.tutorial.regex.client.shared;
 
 /**
  * Utility methods for making precondition/postcondition assertions.

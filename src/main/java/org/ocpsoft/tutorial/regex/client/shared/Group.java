@@ -2,16 +2,17 @@ package org.ocpsoft.tutorial.regex.client.shared;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.jboss.errai.marshalling.client.api.annotations.MapsTo;
+import org.ocpsoft.tutorial.regex.client.shared.ParseTools.CapturingGroup;
 
 @Portable
 public class Group implements Comparable<Group>
 {
-   private String fragment;
+   private CapturingGroup fragment;
    private int start;
    private int end;
 
    public Group(
-            @MapsTo("fragment") String fragment,
+            @MapsTo("fragment") CapturingGroup fragment,
             @MapsTo("start") int start,
             @MapsTo("end") int end)
    {
@@ -20,7 +21,7 @@ public class Group implements Comparable<Group>
       this.end = end;
    }
 
-   public String getFragment()
+   public CapturingGroup getRegexFragment()
    {
       return fragment;
    }

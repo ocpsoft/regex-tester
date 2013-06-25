@@ -21,8 +21,9 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.ocpsoft.tutorial.regex.server.ParseTools.CaptureType;
-import org.ocpsoft.tutorial.regex.server.ParseTools.CapturingGroup;
+import org.ocpsoft.tutorial.regex.client.shared.ParseTools;
+import org.ocpsoft.tutorial.regex.client.shared.ParseTools.CaptureType;
+import org.ocpsoft.tutorial.regex.client.shared.ParseTools.CapturingGroup;
 
 /**
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
