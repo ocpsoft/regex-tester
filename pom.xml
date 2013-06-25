@@ -141,6 +141,12 @@
 				<configuration>
 					<filesets>
 						<fileset>
+							<directory>src/main/gwt-unitCache</directory>
+							<includes>
+								<include>**</include>
+							</includes>
+						</fileset>
+						<fileset>
 							<directory>src/main/webapp</directory>
 							<includes>
 								<include>app/**</include>
