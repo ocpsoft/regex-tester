@@ -69,35 +69,34 @@ public class Group implements Comparable<Group>
    }
 
    /**
-    * @return -1 when this object should be processed before the other
-    * 0 when this object is the same as the other
-    * 1 when this object should be processed after the other 
+    * @return -1 when this object should be processed before the other 0 when this object is the same as the other 1
+    *         when this object should be processed after the other
     */
    @Override
    public int compareTo(Group o)
    {
-      if(o == null)
-         return 1;
-      
-      if(start < o.getStart())
-            return 1;
-      
-      if(start == o.getStart())
+      if (o == null)
+         throw new NullPointerException("Cannot compare against null objects.");
+
+      if (start < o.getStart())
+         return -1;
+
+      if (start == o.getStart())
       {
-         if(end > o.getEnd())
-            return 1;
-         else if(end < o.getEnd())
+         if (end > o.getEnd())
             return -1;
+         else if (end < o.getEnd())
+            return 1;
       }
 
-      if(start > o.getStart())
+      if (start > o.getStart())
       {
-         if(end < o.getEnd())
-            return -1;
-         if(end > o.getEnd())
+         if (end < o.getEnd())
+            return 1;
+         if (end > o.getEnd())
             return 1;
       }
-      
+
       return 0;
    }
 }

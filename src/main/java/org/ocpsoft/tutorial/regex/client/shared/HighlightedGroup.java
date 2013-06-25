@@ -6,14 +6,14 @@ import java.util.List;
 public class HighlightedGroup
 {
    private String text;
-   private List<HighlightedGroup> groups;
+   private List<HighlightedGroup> children;
    private Group group;
    private int start = -1;
    private int end = -1;
 
    public HighlightedGroup(String text, int start, int end)
    {
-      this.groups = new ArrayList<HighlightedGroup>();
+      this.children = new ArrayList<HighlightedGroup>();
       this.text = text;
       this.start = start;
       this.end = end;
@@ -27,7 +27,7 @@ public class HighlightedGroup
 
    public void add(HighlightedGroup group)
    {
-      this.groups.add(group);
+      this.children.add(group);
    }
 
    public Group getGroup()
@@ -37,7 +37,7 @@ public class HighlightedGroup
 
    public List<HighlightedGroup> getChildren()
    {
-      return groups;
+      return children;
    }
 
    public int getStart()
@@ -63,12 +63,12 @@ public class HighlightedGroup
    @Override
    public String toString()
    {
-      if (groups.isEmpty())
+      if (children.isEmpty())
          return text;
       else
       {
          String result = "";
-         for (HighlightedGroup group : groups) {
+         for (HighlightedGroup group : children) {
             result += group.toString();
          }
          return result;

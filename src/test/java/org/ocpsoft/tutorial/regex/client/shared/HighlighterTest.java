@@ -20,6 +20,18 @@ public class HighlighterTest
    }
 
    @Test
+   public void testResultsHighlightExplicitGroups2() throws Exception
+   {
+      RegexParserImpl l = new RegexParserImpl();
+      String text = "four";
+      RegexResult result = l.parse(new RegexRequest(text, "\\w{2}", null));
+
+      HighlightedGroup highlighted = new Highlighter().highlight(text, result);
+      Assert.assertEquals(text, highlighted.toString());
+      Assert.assertEquals(text, highlighted.getText());
+   }
+
+   @Test
    public void testResultsHighlightImplicitGroups() throws Exception
    {
       RegexParserImpl l = new RegexParserImpl();

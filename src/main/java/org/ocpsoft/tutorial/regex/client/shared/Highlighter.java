@@ -16,7 +16,6 @@ public final class Highlighter
          List<Group> groups = new ArrayList<Group>(event.getGroups());
 
          Collections.sort(groups);
-         Collections.reverse(groups);
 
          highlightGroup(groups, result);
       }

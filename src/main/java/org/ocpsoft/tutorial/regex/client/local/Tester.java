@@ -34,6 +34,7 @@ import org.jboss.errai.ui.nav.client.local.TransitionTo;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
+import org.ocpsoft.tutorial.regex.client.shared.HighlightedGroup;
 import org.ocpsoft.tutorial.regex.client.shared.Highlighter;
 import org.ocpsoft.tutorial.regex.client.shared.RegexParser;
 import org.ocpsoft.tutorial.regex.client.shared.RegexRequest;
@@ -303,7 +304,12 @@ public class Tester extends Composite
          {
             Highlighter highlighter = new Highlighter();
             result.clear();
-            result.add(new HighlightedResult(highlighter.highlight(event.getText(), event)));
+            System.out.println("EVENT TEXT: " + event.getText());
+            System.out.println("EVENT GROUPS: " + event.getGroups());
+
+            HighlightedGroup highlightedGroups = highlighter.highlight(event.getText(), event);
+            System.out.println("RESULT: " + highlightedGroups);
+            result.add(new HighlightedResult(highlightedGroups));
             if (event.isMatches())
             {
                result.addStyleName("matches");

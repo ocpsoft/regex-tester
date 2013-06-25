@@ -19,22 +19,24 @@ public class HighlightedResult extends HTMLPanel
    {
       super("span", "");
 
-      this.group = group;
-      if (!group.isMatchingGroup())
+      if (colorCycle == null)
       {
-         for (HighlightedGroup child : group.getChildren()) {
-            this.add(new HighlightedResult(child, colorCycle));
-         }
+         colorCycle = new ColorCycle();
       }
-      else
-      {
-         this.addStyleName("highlight");
+      this.colorCycle = colorCycle;
+
+      this.group = group;
+      for (HighlightedGroup child : group.getChildren()) {
+         this.add(new HighlightedResult(child, colorCycle));
       }
 
       if (this.group.isLeaf())
       {
-         System.out.println("LEAF: " + group);
          getElement().setInnerSafeHtml(new SafeHtmlBuilder().appendEscaped(group.getText()).toSafeHtml());
+      }
+
+      if (this.group.isMatchingGroup()) {
+         this.addStyleName("highlight");
       }
    }
 
@@ -45,8 +47,6 @@ public class HighlightedResult extends HTMLPanel
 
       if (this.group.isMatchingGroup())
       {
-         if (colorCycle == null)
-            this.colorCycle = new ColorCycle();
          this.getElement().setAttribute("style", "color: #" + colorCycle.getColor() + ";");
       }
    }
