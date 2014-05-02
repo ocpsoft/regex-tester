@@ -18,8 +18,8 @@ package org.ocpsoft.tutorial.regex.client.shared;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
-import org.jboss.errai.marshalling.client.api.annotations.MapsTo;
 
 /**
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
